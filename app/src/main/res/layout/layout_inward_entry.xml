@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        layout="@layout/app_toolbar_custom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="vertical"
+                android:gravity="end"
+                android:background="@color/colorPrimary"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/lay1"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:id="@+id/txtpartyname"
+                        android:layout_weight="2"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:text = "Party : "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_weight="2"
+                        android:id="@+id/txtbillnumber"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15dp"
+                        android:layout_marginTop="3dp"
+                        android:text = "BillNumber : "/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/lay2"
+                    android:layout_below="@+id/lay1"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:id="@+id/txtdate"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15dp"
+                        android:text = "Date : "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_weight="2"
+                        android:id="@+id/txtGodownname"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15dp"
+                        android:text = "Godown : "/>
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>

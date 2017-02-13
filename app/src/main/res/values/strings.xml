@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SGSAutoMobile</string>
+
+        <string name="hint_party_name">Party Name</string>
+        <string name="hint_bill_number">Bill Number</string>
+        <string name="hint_date">Date</string>
+        <string name="hint_godown">Godown Name</string>
+
+</resources>
