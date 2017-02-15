@@ -27,13 +27,14 @@
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical" />
 
-           <!--    <ProgressBar
+              <ProgressBar
                     android:id="@+id/itemProgressBar"
                     style="@android:style/Widget.ProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
--->
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/floatingActionButton"
@@ -41,8 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
                     android:layout_margin="16dp"
-                    android:src="@mipmap/ic_add_circle_outline_black_36dp"
-                    app:backgroundTint="#f00"
+                    android:src="@drawable/check"
+                    app:backgroundTint="@color/colorGreen"
                     app:borderWidth="0dp" />
 
             </FrameLayout>

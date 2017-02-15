@@ -1,9 +1,11 @@
-package com.adairtechnology.sgsautomobile;
+package com.adairtechnology.sgsautomobile.Fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,8 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.adairtechnology.sgsautomobile.Activity_Inward_Entry_Screen;
 import com.adairtechnology.sgsautomobile.Adapters.ItemCartAdapter;
 import com.adairtechnology.sgsautomobile.Models.Item;
+import com.adairtechnology.sgsautomobile.R;
 import com.adairtechnology.sgsautomobile.Utils.EndPoints;
 import com.adairtechnology.sgsautomobile.Utils.HttpHandler;
 
@@ -27,14 +31,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Android-Team1 on 2/10/2017.
+ * Created by Android-Team1 on 2/14/2017.
  */
 
-public class Activity_All_Items_Screen  extends Fragment {
+public class Fragment_Items_One  extends Fragment implements Serializable {
     private Context mContext;
     private CoordinatorLayout layout_main;
     private FloatingActionButton floatingActionButton;
@@ -42,7 +47,8 @@ public class Activity_All_Items_Screen  extends Fragment {
     public ArrayList<Item> itemNameArrayList = new ArrayList<>();
     private RecyclerView shopRcyclerView;
     private ProgressBar itemProgressBar;
-    public Activity_All_Items_Screen() {
+    Bundle mBundle = new Bundle();
+    public Fragment_Items_One() {
 
     }
 
@@ -59,8 +65,7 @@ public class Activity_All_Items_Screen  extends Fragment {
         shopRcyclerView.setHasFixedSize(true);
 
         itemshopAdapter = new ItemCartAdapter(mContext, itemNameArrayList);
-        //itemProgressBar = (ProgressBar) rootView.findViewById(R.id.itemProgressBar);
-
+        itemProgressBar = (ProgressBar) rootView.findViewById(R.id.itemProgressBar);
 
 
         new GetItemList().execute();
@@ -68,7 +73,7 @@ public class Activity_All_Items_Screen  extends Fragment {
         shopRcyclerView.setLayoutManager(mLayoutManager);
         shopRcyclerView.setItemAnimator(new DefaultItemAnimator());
         shopRcyclerView.setAdapter(itemshopAdapter);
-        shopRcyclerView.addOnItemTouchListener(new Activity_All_Items_Screen.RecyclerTouchListener(mContext, shopRcyclerView, new Activity_All_Items_Screen.ClickListener() {
+        shopRcyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext, shopRcyclerView, new Fragment_Items_One.ClickListener() {
             @Override
             public void onClick(View view, int position) {
             }
@@ -77,6 +82,26 @@ public class Activity_All_Items_Screen  extends Fragment {
             public void onLongClick(View view, int position) {
             }
         }));
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                String shippingorder = prefs.getString("Orderinfo", "");
+                System.out.println("hi"+shippingorder);
+
+
+                Intent in  = new Intent(getActivity(), Activity_Inward_Entry_Screen.class);
+                in.putExtra("Items_List",shippingorder);
+                startActivity(in);
+                getActivity().finish();
+
+            }
+        });
+
+        String text_search = FragmentHome.search_text;
+        System.out.println("hi"+ text_search);
         return rootView;
     }
 
@@ -87,6 +112,7 @@ public class Activity_All_Items_Screen  extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            itemProgressBar.setVisibility(View.VISIBLE);
 
         }
 
@@ -137,7 +163,7 @@ public class Activity_All_Items_Screen  extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-          //  itemProgressBar.setVisibility(View.GONE);
+            itemProgressBar.setVisibility(View.GONE);
             itemshopAdapter = new ItemCartAdapter(mContext, (ArrayList<Item>)listForSearchConcepts);
             shopRcyclerView.setAdapter(itemshopAdapter);
 
@@ -158,9 +184,9 @@ public class Activity_All_Items_Screen  extends Fragment {
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
-        private Activity_All_Items_Screen.ClickListener clickListener;
+        private ClickListener clickListener;
 
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final Activity_All_Items_Screen.ClickListener clickListener) {
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override

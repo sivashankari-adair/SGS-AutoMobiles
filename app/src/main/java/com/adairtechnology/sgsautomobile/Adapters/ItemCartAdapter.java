@@ -1,22 +1,20 @@
 package com.adairtechnology.sgsautomobile.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.adairtechnology.sgsautomobile.Activity_All_Items_Screen;
 import com.adairtechnology.sgsautomobile.Models.Item;
 import com.adairtechnology.sgsautomobile.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Android-Team1 on 2/10/2017.
@@ -24,7 +22,7 @@ import java.util.List;
 
 public class ItemCartAdapter extends RecyclerView
         .Adapter<ItemCartAdapter
-        .DataObjectHolder> {
+        .DataObjectHolder>  {
     private Context mContext;
     private static String LOG_TAG = "ItemCartAdapter";
     private ArrayList<Item> mDataset;
@@ -32,8 +30,9 @@ public class ItemCartAdapter extends RecyclerView
     LayoutInflater inflater;
     private static int added_value;
  //   public static String all_details;
-    private ArrayList<String> cartItem = new ArrayList<String>();;
+    public String pro_name,pro_code,pro_qty;
 
+    private ArrayList<String> cartItem = new ArrayList<String>();
     public ItemCartAdapter(Context mContext, ArrayList<Item> itemNameArrayList) {
 
         this.mContext = mContext;
@@ -76,29 +75,6 @@ public class ItemCartAdapter extends RecyclerView
         holder.productcode.setText(mDataset.get(position).getItemcode());
         holder.productname.setText(mDataset.get(position).getName());
 
-        holder.chkIos.setOnClickListener(new View.OnClickListener() {
-
-            String pro_code = holder.productcode.getText().toString();
-            String pro_name = holder.productname.getText().toString();
-            String pro_qty  = holder.quantity.getText().toString();
-            String all_details = "{"+"pro_code="+pro_code +"," +
-                    "pro_name="+pro_name +"," +
-                    "pro_qty="+pro_qty +"}";
-
-            @Override
-            public void onClick(View view) {
-                if (((CheckBox) view).isChecked()) {
-
-                    cartItem.add(all_details);
-                    System.out.println("Cart Item Added" + cartItem);
-                }
-                else{
-                    cartItem.remove(all_details);
-                    System.out.println("Cart Item Removed" + cartItem);
-                }
-            }
-        });
-
 
         holder.increment_value.setOnClickListener(new View.OnClickListener() {
             int counter = 0;
@@ -122,13 +98,61 @@ public class ItemCartAdapter extends RecyclerView
                 int new_val = Integer.parseInt(holder.quantity.getText()+"");
                 new_val--;
 
+                if(new_val<0){
+                    new_val=0;
+                }
+
                 int added_value = new_val;
                 holder.quantity.setText(added_value+"");
 
             }
         });
 
+
+        holder.chkIos.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if (((CheckBox) view).isChecked()) {
+
+                    String pro_code = holder.productcode.getText().toString();
+                    String pro_name = holder.productname.getText().toString();
+                    String pro_qty  = holder.quantity.getText().toString();
+                    String all_details = "{"+"pro_code="+pro_code +"," +
+                            "pro_name="+pro_name +"," +
+                            "pro_qty="+pro_qty +"}";
+
+                    cartItem.add(all_details);
+                    System.out.println("Cart Item Added" + cartItem);
+
+
+
+                }
+                else{
+
+                    String pro_code = holder.productcode.getText().toString();
+                    String pro_name = holder.productname.getText().toString();
+                    String pro_qty  = holder.quantity.getText().toString();
+                    String all_details = "{"+"pro_code="+pro_code +"," +
+                            "pro_name="+pro_name +"," +
+                            "pro_qty="+pro_qty +"}";
+
+
+                    cartItem.remove(all_details);
+                    System.out.println("Cart Item Removed" + cartItem);
+                }
+
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("Orderinfo", cartItem+"");
+                editor.clear();
+                editor.commit();
+            }
+
+        });
     }
+
 
     @Override
     public int getItemCount() {

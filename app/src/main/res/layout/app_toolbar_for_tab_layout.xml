@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/colorPrimary">
+    <ImageView
+        android:id="@+id/img_BACK"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/arrow_left"
+        />
+
+
+   <!-- <SearchView
+        android:id="@+id/img_SEARCH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:background="@color/colorWhite"
+        android:layout_alignBottom="@+id/tv_title1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp" />-->
+
+    <TextView
+        android:id="@+id/tv_title_FRAGMENT"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Inward Entry"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_alignTop="@+id/img"
+        android:layout_toRightOf="@+id/img"
+        android:layout_toEndOf="@+id/img" />
+
+    <SearchView
+        android:id="@+id/img_SEARCH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:queryHint="Search here"
+        android:searchIcon="@drawable/magnify"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:paddingLeft="100dp"/>
+</RelativeLayout>

@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adairtechnology.sgsautomobile.Fragments.FragmentHome;
+
 /**
  * Created by Android-Team1 on 2/10/2017.
  */
@@ -30,6 +32,13 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_inward_entry);
+
+        Intent in = getIntent();
+        String ins = in.getStringExtra("Items_List");
+        Toast.makeText(Activity_Inward_Entry_Screen.this,ins
+                , Toast.LENGTH_LONG).show();
+
+
 
         tvTitle = (TextView) findViewById(R.id.tv_title1);
         image_back = (ImageView)findViewById(R.id.img);
@@ -60,7 +69,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
 
-                Activity_All_Items_Screen fragment = new Activity_All_Items_Screen();
+                FragmentHome fragment = new FragmentHome();
 
                 fragmentTransaction.add(android.R.id.content, fragment);
                 fragmentTransaction.addToBackStack(null);
