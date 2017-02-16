@@ -1,8 +1,10 @@
 package com.adairtechnology.sgsautomobile.Fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,7 +24,10 @@ import android.widget.ProgressBar;
 
 import com.adairtechnology.sgsautomobile.Activity_Inward_Entry_Screen;
 import com.adairtechnology.sgsautomobile.Adapters.ItemCartAdapter;
+import com.adairtechnology.sgsautomobile.DBController;
+import com.adairtechnology.sgsautomobile.DBController1;
 import com.adairtechnology.sgsautomobile.Models.Item;
+import com.adairtechnology.sgsautomobile.PlacesList;
 import com.adairtechnology.sgsautomobile.R;
 import com.adairtechnology.sgsautomobile.Utils.EndPoints;
 import com.adairtechnology.sgsautomobile.Utils.HttpHandler;
@@ -48,6 +53,8 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
     private RecyclerView shopRcyclerView;
     private ProgressBar itemProgressBar;
     Bundle mBundle = new Bundle();
+    DBController controller = new DBController(getContext());
+  //  String code,name,qty,id;
     public Fragment_Items_One() {
 
     }
@@ -69,6 +76,9 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
 
 
         new GetItemList().execute();
+
+
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         shopRcyclerView.setLayoutManager(mLayoutManager);
         shopRcyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -92,7 +102,14 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
                 System.out.println("hi"+shippingorder);
 
 
-                Intent in  = new Intent(getActivity(), Activity_Inward_Entry_Screen.class);
+             /*   Intent in  = new Intent(getActivity(), Activity_Inward_Entry_Screen.class);
+                in.putExtra("Items_List",shippingorder);
+                startActivity(in);
+                getActivity().finish();
+
+              */
+
+                Intent in  = new Intent(getActivity(), PlacesList.class);
                 in.putExtra("Items_List",shippingorder);
                 startActivity(in);
                 getActivity().finish();
@@ -149,6 +166,37 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
                         listForSearchConcepts.add(item);
                         Log.i("myitemlist",listForSearchConcepts.toString());
                         System.out.println("Hi"+listForSearchConcepts.toString());
+
+
+                        String code = c.optString("itemcode");
+                        String name = c.optString("name");
+                        String qty = c.optString("qty");
+                        String id = c.optString("id");
+
+                        /*controller = new DBController(getContext());
+                        SQLiteDatabase db = controller.getWritableDatabase();
+                        ContentValues cv = new ContentValues();
+                        cv.put("place", code);
+                        cv.put("country", name);
+                        db.insert("places", null, cv);
+
+                        db.close();
+
+
+                        System.out.println("Test value in data base  : " + cv);*/
+
+                        controller = new DBController(getContext());
+                        SQLiteDatabase db = controller.getWritableDatabase();
+                        ContentValues cv = new ContentValues();
+                        cv.put("name", name);
+                        cv.put("quantity", qty);
+                        cv.put("itemcode", code);
+                        db.insert("items", null, cv);
+
+                        db.close();
+
+
+                        System.out.println("Test value in data base  : " + cv);
 
 
                     }
