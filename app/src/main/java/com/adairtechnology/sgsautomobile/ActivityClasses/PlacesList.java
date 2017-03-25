@@ -1,9 +1,12 @@
-package com.adairtechnology.sgsautomobile;
+package com.adairtechnology.sgsautomobile.ActivityClasses;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.adairtechnology.sgsautomobile.Db.DBController;
+import com.adairtechnology.sgsautomobile.R;
 
 import java.util.HashMap;
 import java.util.List;

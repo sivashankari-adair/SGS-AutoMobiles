@@ -1,7 +1,9 @@
-package com.adairtechnology.sgsautomobile;
+package com.adairtechnology.sgsautomobile.ActivityClasses;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.adairtechnology.sgsautomobile.R;
 
 /**
  * Created by Android-Team1 on 2/11/2017.

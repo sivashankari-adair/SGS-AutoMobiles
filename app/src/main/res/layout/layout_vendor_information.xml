@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/linear_vendor">
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -21,9 +22,11 @@
             android:ems="3"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"
+            android:text="Akii"
             android:hint="@string/hint_party_name">
         </EditText>
     </android.support.design.widget.TextInputLayout>
+
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -41,16 +44,22 @@
             android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:text="23"
             android:hint="@string/hint_bill_number">
         </EditText>
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="15dp">
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="223dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-       >
+        android:weightSum="1">
 
         <EditText
             android:id="@+id/pur_date"
@@ -63,26 +72,41 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_date">
         </EditText>
+
+
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-       >
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:id="@+id/imgCaled"
+            android:background="@drawable/bluecal3"/>
 
-        <EditText
-            android:id="@+id/godown_name"
+    </LinearLayout>
+
+    <!--
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:paddingTop="0dp"
-            android:layout_centerVertical="true"
-            android:ems="3"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:hint="@string/hint_godown">
-        </EditText>
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+           >
+
+            <EditText
+                android:id="@+id/godown_name"
+                android:layout_width="match_parent"
+                android:paddingTop="0dp"
+                android:layout_centerVertical="true"
+                android:ems="3"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:hint="@string/hint_godown">
+            </EditText>
+        </android.support.design.widget.TextInputLayout>
+    -->
+
+
     <Button
         android:id="@+id/save_btn_dialog"
         android:layout_marginLeft="50dp"

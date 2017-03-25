@@ -1,15 +1,11 @@
 package com.adairtechnology.sgsautomobile.Fragments;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
-import android.app.SearchManager;
 import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +30,7 @@ public class FragmentHome extends Fragment {
     public static String search_text;
 
     public FragmentHome() {
+
     }
 
     @Override
@@ -76,9 +73,9 @@ public class FragmentHome extends Fragment {
         mTabHost.addTab(mTabHost.newTabSpec("fragmentAll").setIndicator("ALL"),
                 Fragment_Items_One.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("fragmentFavorite").setIndicator("LIMIT1"),
-                Fragment_Items_One.class, null);
+                Fragment_Items_Two.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("fragmentOffers").setIndicator("LIMIT2"),
-                Fragment_Items_One.class, null);
+                Fragment_Items_Three.class, null);
 
         mTabHost.getTabWidget().setDividerDrawable(null); // android:showDividers="none" - in xml
 

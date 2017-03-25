@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TableRow
+        android:id="@+id/lvh"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:scrollbars="horizontal"
+        android:weightSum="4" >
+
+        <View
+            android:background="@color/pink_300"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"/>
+
+        <TextView
+            android:id="@+id/txtCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="1"
+            android:layout_margin="1dp"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+        <View
+            android:background="@color/pink_300"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"/>
+
+        <TextView
+            android:id="@+id/txtname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text="Barcelona"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+        <View
+            android:background="@color/pink_300"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"/>
+
+
+        <TextView
+            android:id="@+id/txtcountry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="Spain"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+        <View
+            android:background="@color/pink_300"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"/>
+
+        <TextView
+            android:id="@+id/txtcou"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="Spain"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+        <View
+            android:background="@color/pink_300"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"/>
+
+        <TextView
+            android:id="@+id/txtcoun"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="Spain"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+        <View
+            android:background="@color/pink_300"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/check_id"
+            android:layout_weight="0.4"
+            android:src="@drawable/deletered"
+
+           />
+
+        <View
+            android:background="@color/pink_300"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"/>
+
+
+
+    </TableRow>
+
+</TableLayout>

@@ -1,5 +1,6 @@
 package com.adairtechnology.sgsautomobile.Fragments;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -21,13 +22,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.adairtechnology.sgsautomobile.Activity_Inward_Entry_Screen;
+import com.adairtechnology.sgsautomobile.ActivityClasses.Activity_Inward_Entry_Screen;
+import com.adairtechnology.sgsautomobile.ActivityClasses.LoginActivity;
+import com.adairtechnology.sgsautomobile.ActivityClasses.ReportActivity;
 import com.adairtechnology.sgsautomobile.Adapters.ItemCartAdapter;
-import com.adairtechnology.sgsautomobile.DBController;
-import com.adairtechnology.sgsautomobile.DBController1;
+import com.adairtechnology.sgsautomobile.Db.DBController;
 import com.adairtechnology.sgsautomobile.Models.Item;
-import com.adairtechnology.sgsautomobile.PlacesList;
+import com.adairtechnology.sgsautomobile.Models.ListItem;
 import com.adairtechnology.sgsautomobile.R;
 import com.adairtechnology.sgsautomobile.Utils.EndPoints;
 import com.adairtechnology.sgsautomobile.Utils.HttpHandler;
@@ -39,6 +42,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Android-Team1 on 2/14/2017.
@@ -52,9 +57,14 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
     public ArrayList<Item> itemNameArrayList = new ArrayList<>();
     private RecyclerView shopRcyclerView;
     private ProgressBar itemProgressBar;
+    Activity_Inward_Entry_Screen activie;
     Bundle mBundle = new Bundle();
     DBController controller = new DBController(getContext());
   //  String code,name,qty,id;
+    ArrayList<Item> employeeList;
+    private static Dialog dialogs;
+    String updateinfo,restoredIp,logininfo,gcodee;
+
     public Fragment_Items_One() {
 
     }
@@ -71,14 +81,72 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
         shopRcyclerView = (RecyclerView) rootView.findViewById(R.id.itemRecyclerView);
         shopRcyclerView.setHasFixedSize(true);
 
+        SharedPreferences prefss = getContext().getSharedPreferences("MYPREFF", MODE_PRIVATE);
+        logininfo = prefss.getString("loginInfo", null);
+        System.out.println("The login inform fragmen : " +logininfo);
+        try {
+            JSONObject jsonObj = new JSONObject(logininfo);
+            JSONArray godown_name = jsonObj.getJSONArray("Gcode");
+            System.out.println("godown_name : " +godown_name);
+
+            // looping through All Contacts
+            for (int i = 0; i < godown_name.length(); i++) {
+                JSONObject cc = godown_name.getJSONObject(i);
+                gcodee = cc.optString("Code");
+
+            }
+            System.out.println("godown name fragment :" +gcodee);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         itemshopAdapter = new ItemCartAdapter(mContext, itemNameArrayList);
         itemProgressBar = (ProgressBar) rootView.findViewById(R.id.itemProgressBar);
-
-
         new GetItemList().execute();
 
+       /* SharedPreferences prefse = this.getActivity().getSharedPreferences("MYPReEFF",Context.MODE_PRIVATE);
+        updateinfo = prefse.getString("updateInfo", null);
+        System.out.println("test update info "+updateinfo);
+
+        List<Item> listForSearchConcepts = new ArrayList<Item>();
+        try {
+            JSONObject jsonObjj = new JSONObject(updateinfo);
+            String res = jsonObjj.getString("status");
+            String gstatus_code = jsonObjj.getString("0M50PB1QA");
+            System.out.println("hfdfdfh" + gstatus_code);
+            System.out.println("hdfh" + res);
+
+            //Getting JSON ARRAY for Items
+            JSONObject Godown_jsonobjj = jsonObjj.getJSONObject("0M50PB1QA");
+            System.out.println("hdfhsdsd" + Godown_jsonobjj);
+
+            JSONArray Godown_list_items_jsonobjj = Godown_jsonobjj.getJSONArray("items");
+            for (int j = 0; j < Godown_list_items_jsonobjj.length(); j++) {
+                JSONObject c = Godown_list_items_jsonobjj.getJSONObject(j);
+
+                Item itemc = new Item();
+                itemc.setQty(c.optString("qty"));
+                itemc.setName(c.optString("name"));
+                itemc.setItemcode(c.optString("itemcode"));
+                listForSearchConcepts.add(itemc);
+
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+       /* itemshopAdapter = new ItemCartAdapter(mContext, (ArrayList<Item>)listForSearchConcepts);
+        shopRcyclerView.setAdapter(itemshopAdapter);
+*/
 
 
+       /* DBController databaseHelper = new DBController(getContext());
+        employeeList = new ArrayList<Item>();
+
+        employeeList = databaseHelper.getAllEmployee();
+        itemshopAdapter = new ItemCartAdapter(mContext, employeeList);
+        shopRcyclerView.setAdapter(itemshopAdapter);
+*/
+       // new GetItemList().execute();
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         shopRcyclerView.setLayoutManager(mLayoutManager);
         shopRcyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -99,26 +167,20 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 String shippingorder = prefs.getString("Orderinfo", "");
-                System.out.println("hi"+shippingorder);
+                System.out.println("hi Fragment One"+shippingorder);
 
-
-             /*   Intent in  = new Intent(getActivity(), Activity_Inward_Entry_Screen.class);
+                Toast.makeText(mContext, "Fragment fab is clicked", Toast.LENGTH_SHORT).show();
+                Intent in  = new Intent(getActivity(), Activity_Inward_Entry_Screen.class);
                 in.putExtra("Items_List",shippingorder);
                 startActivity(in);
                 getActivity().finish();
 
-              */
-
-                Intent in  = new Intent(getActivity(), PlacesList.class);
-                in.putExtra("Items_List",shippingorder);
-                startActivity(in);
-                getActivity().finish();
 
             }
         });
 
         String text_search = FragmentHome.search_text;
-        System.out.println("hi"+ text_search);
+        System.out.println("hi Search"+ text_search);
         return rootView;
     }
 
@@ -135,14 +197,21 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
 
-            // http://space7cloud.com/sgs_trader/sgs_datas.php?user_godown_id=g001&date=//for testing
-            String url = EndPoints.allitems;
 
             // Making a request to url and getting response
-            String jsonStrr = sh.makeServiceCall(url);
-            Log.e("Test url2", url);
+            //http://localhost/android/automobiles/get_data.php?page=item_list&Gcode=0M50PB1QA
+            HttpHandler httpHandler = new HttpHandler();
+
+            SharedPreferences prefs = getContext().getSharedPreferences("MYPREFERNCE",Context.MODE_PRIVATE);;
+            restoredIp = prefs.getString("ip", null);
+            System.out.println("test update info ipAddress "+restoredIp);
+
+            String Url = "http://"+ restoredIp +"/android/automobiles/get_data.php?page=item_list&Gcode=0M50PB1QA";
+            System.out.println("The fragement url :" +Url);
+            String jsonStrr = httpHandler.makeServiceCall(Url);
+
+            Log.e("Test url2", jsonStrr);
             //Log.e("Response from url:", jsonStrr);
 
             if (jsonStrr != null) {
@@ -158,45 +227,14 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
                         JSONObject c = itemss.getJSONObject(i);
 
                         Item item = new Item();
-                        item.setId(c.optString("id"));
                         item.setQty(c.optString("qty"));
                         item.setName(c.optString("name"));
                         item.setItemcode(c.optString("itemcode"));
-                        item.setFont(c.optString("font"));
+
                         listForSearchConcepts.add(item);
                         Log.i("myitemlist",listForSearchConcepts.toString());
                         System.out.println("Hi"+listForSearchConcepts.toString());
 
-
-                        String code = c.optString("itemcode");
-                        String name = c.optString("name");
-                        String qty = c.optString("qty");
-                        String id = c.optString("id");
-
-                        /*controller = new DBController(getContext());
-                        SQLiteDatabase db = controller.getWritableDatabase();
-                        ContentValues cv = new ContentValues();
-                        cv.put("place", code);
-                        cv.put("country", name);
-                        db.insert("places", null, cv);
-
-                        db.close();
-
-
-                        System.out.println("Test value in data base  : " + cv);*/
-
-                        controller = new DBController(getContext());
-                        SQLiteDatabase db = controller.getWritableDatabase();
-                        ContentValues cv = new ContentValues();
-                        cv.put("name", name);
-                        cv.put("quantity", qty);
-                        cv.put("itemcode", code);
-                        db.insert("items", null, cv);
-
-                        db.close();
-
-
-                        System.out.println("Test value in data base  : " + cv);
 
 
                     }
@@ -236,6 +274,7 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
 
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
+
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {

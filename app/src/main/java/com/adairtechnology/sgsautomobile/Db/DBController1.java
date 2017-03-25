@@ -1,4 +1,4 @@
-package com.adairtechnology.sgsautomobile;
+package com.adairtechnology.sgsautomobile.Db;
 
 
 import android.content.Context;
