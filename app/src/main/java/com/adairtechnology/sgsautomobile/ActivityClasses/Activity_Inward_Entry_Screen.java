@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +17,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,13 +27,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.adairtechnology.sgsautomobile.Adapters.ItemCartAdapter;
 import com.adairtechnology.sgsautomobile.Adapters.MyCustomAdapter;
 import com.adairtechnology.sgsautomobile.Db.DBController;
 import com.adairtechnology.sgsautomobile.Fragments.FragmentHome;
-import com.adairtechnology.sgsautomobile.Models.Item;
+import com.adairtechnology.sgsautomobile.Models.Godown;
 import com.adairtechnology.sgsautomobile.Models.ListItem;
 import com.adairtechnology.sgsautomobile.R;
+import com.adairtechnology.sgsautomobile.Utils.Utils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -53,10 +49,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import static com.adairtechnology.sgsautomobile.R.layout.item;
 
 /**
  * Created by Android-Team1 on 2/10/2017.
@@ -66,7 +61,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
 
     private static TextView party_name,bill_no,bill_date,godown_name;
     private EditText edt_search,edt_nameVendor,edt_billNo,edt_date,edt_godownName,edt_discountNew,edt_rateNew,edt_qutyNew,edt_itemCodeNew,edt_nameNew;
-    String purchaseItemName, purchaseCode, purchQuty, purRate, purDisc, str_addNew, str_vendorInf, arrayAddNew, arrayVendorInf, str_reportName, str_reportBillno, str_reportDate;
+    String purchaseItemName, purchaseCode, purchQuty, purRate, purDisc, str_addNew, arrayAddNew, arrayVendorInf, str_reportName, str_reportBillno, str_reportDate;
     Button btn_save,btn_saveAddNew,btn_update,btn_report;
     public static String pname,pbill,pdate,pgodown,searchItem;
     String fragementValue,text;
@@ -76,11 +71,14 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
     Dialog dialog;
     String val_frag;
     private ListItem item,item1;
-    private List<ListItem> listForSearchConcepts = new ArrayList<ListItem>();
+    private static List<ListItem> listForSearchConcepts = new ArrayList<ListItem>();
     private List<ListItem> listForSearchConcepts1 = new ArrayList<ListItem>();
-    public static int test2 = 0;
+    public  int test2 = 0;
     int test;
-    ListView myList;
+    public static ListView myList;
+    SharedPreferences pref;
+    String value,output1;
+    ArrayList<HashMap<String, String>> output ;
     public static int RowCount;
     public static MyCustomAdapter adapter,adapter1;
     public static TextView tex_rowCount, txt_total;
@@ -90,16 +88,20 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
     String restoredIp,logininfo,gcodee,gstatus_code;
     LinearLayout linear_purchase;
     RelativeLayout relative_list;
-    String res,server_response;
+    String res,server_response,names,gowdon,bill,date;
     String customvalue;
     ImageView imag_calendr;
     static final int DATE_PICKER_ID = 1111;
-    private int year;
+    private int year,index;
     private int month;
     private int day;
     public static String currentDateandTime;
     private static String selected_date;
     public static String final_date;
+    ArrayList<Godown> godowns;
+    public ArrayList<Godown> godownArrayList = new ArrayList<>();
+    DBController controller;
+    public static String  str_vendorInf;
 
 
     @Override
@@ -128,8 +130,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
         edt_billNo = (EditText) dialog.findViewById(R.id.pur_bill_number);
         edt_date = (EditText)dialog.findViewById(R.id.pur_date);
         imag_calendr = (ImageView)dialog.findViewById(R.id.imgCaled);
-//        edt_godownName = (EditText) dialog.findViewById(R.id.godown_name);
         btn_save = (Button) dialog.findViewById(R.id.save_btn_dialog);
+        txt_total = (TextView) findViewById(R.id.txt_quty);
 
         edt_nameNew = (EditText) findViewById(R.id.pur_dialog_itemName);
         edt_itemCodeNew = (EditText) findViewById(R.id.pur_dialog_itemCode);
@@ -142,16 +144,16 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
         btn_report =(Button) findViewById(R.id.btn_report);
 
         tex_rowCount = (TextView) findViewById(R.id.txt_rowCount);
-        txt_total = (TextView) findViewById(R.id.txt_quty);
+
+
+        party_name.setFreezesText(true);
+        godown_name.setFreezesText(true);
+
 
         final Calendar c = Calendar.getInstance();
         year  = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day   = c.get(Calendar.DAY_OF_MONTH);
-
-        edt_date.setText(new StringBuilder().append(day)
-                .append("-").append(month + 1).append("-").append(year)
-                .append(" "));
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         currentDateandTime = sdf.format(new Date());
@@ -159,12 +161,13 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
 
 
 
-        SharedPreferences prefss = getSharedPreferences("MYPREFF", MODE_PRIVATE);
+       SharedPreferences prefss = getSharedPreferences("MYPREFF", MODE_PRIVATE);
         logininfo = prefss.getString("loginInfo", null);
         System.out.println("The login inform : " +logininfo);
         try {
             JSONObject jsonObj = new JSONObject(logininfo);
             JSONArray godown_name = jsonObj.getJSONArray("Gcode");
+
             System.out.println("godown_name : " +godown_name);
 
             // looping through All Contacts
@@ -183,6 +186,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
         System.out.println("The Fragment is :" +fragementValue);
         val_frag = fragementValue;
         test(val_frag);
+
+
 
 
         image_back.setOnClickListener(new View.OnClickListener() {
@@ -234,11 +239,16 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if(!Utils.isNetworkAvailable(Activity_Inward_Entry_Screen.this)){
+                    Toast.makeText(Activity_Inward_Entry_Screen.this, "No Network Connection", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     FragmentHome fragment = new FragmentHome();
                     fragmentTransaction.add(android.R.id.content, fragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
+                }
 
             }
 
@@ -247,6 +257,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
         image_dialodVendor.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+/*
+               controller.delete();
+*/
                dialog.show();
            }
        });
@@ -271,19 +284,16 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
                 gdate = "Date :" + pdate +",";
                 pnobill = "Pbill :" + pbill;
 
-
-                party_name.setText("Party : " + pname);
-                godown_name.setText("Godown : " + gcodee );
+                party_name.setText("Party : " + pname  );
+                godown_name.setText("Godown : " + gcodee  );
                 bill_no.setText("BillNo : " + pbill);
                 bill_date.setText("Date : " + pdate);
 
+
                 str_vendorInf = partyname + gname + gdate + pnobill;
 
-                System.out.println("the party name :"+partyname);
-                System.out.println("the gname :"+gname);
-                System.out.println("the date :"+gdate);
-                System.out.println("the pbill :"+pnobill);
-                System.out.println("the vendor :"+str_vendorInf);
+                System.out.println("The str vendor : " +str_vendorInf);
+
 
                 addVendorInformation();
 
@@ -291,14 +301,11 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
 
         });
 
+        party_name.setText("Party : " + pname);
+        godown_name.setText("Godown : " + gcodee);
+        bill_no.setText("BillNo : " + pbill);
+        bill_date.setText("Date : " + pdate);
 
-       /* myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-*/
         floatingActionButton_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -320,15 +327,27 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
                 edt_rateNew.setText("");
                 edt_discountNew.setText("");
 
+
             }
         });
 
         searchtext();
+
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                new addNewTask().execute();
+                    pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                    value = pref.getString("ItemListFinalValue", "");
+                    System.out.println("Value Submit for update: " + "" + value);
+                if(!Utils.isNetworkAvailable(Activity_Inward_Entry_Screen.this)){
+                    Toast.makeText(Activity_Inward_Entry_Screen.this, "No Network Connection", Toast.LENGTH_SHORT).show();
+                }
+                 else {   new addNewTask().execute();
+                            listForSearchConcepts.clear();
+                }
+
+
             }
         });
         btn_report.setOnClickListener(new View.OnClickListener() {
@@ -339,16 +358,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
 
             }
         });
-//        tex_rowCount.setText("RowCount :" + MyCustomAdapter.RowCount);
-      /*  adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
-        System.out.println("List Size2 :"+listForSearchConcepts.size());
-        for (int i = 1; i == listForSearchConcepts.size(); i++) {
 
-            System.out.println("Count_loop :"+listForSearchConcepts.size());
-            myList.setAdapter(adapter1);
-            //myList.setScrollingCacheEnabled(true);
-            adapter1.notifyDataSetChanged();
-        }*/
 
 
 
@@ -377,144 +387,69 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
 
     private void test(String val_frag) {
 
-        try {
-
-            System.out.println("The json " +val_frag);
-            JSONArray itemss = new JSONArray(val_frag);
-            System.out.println("The json array " +itemss);
-            for (int i = 0; i < itemss.length(); i++) {
-                System.out.println("The json array for loop " +i);
-                JSONObject c = itemss.getJSONObject(i);
-                System.out.println("The json array for loop " +c);
+        if(!Utils.isNetworkAvailable(Activity_Inward_Entry_Screen.this)) {
+            Toast.makeText(this, "No Network Connection", Toast.LENGTH_SHORT).show();
+                   }
+        else {
+            try {
+                System.out.println("The json " + val_frag);
+                JSONArray itemss = new JSONArray(val_frag);
+                System.out.println("The json array " + itemss);
+                for (int i = 0; i < itemss.length(); i++) {
+                    System.out.println("The json array for loop " + i);
+                    JSONObject c = itemss.getJSONObject(i);
+                    System.out.println("The json array for loop " + c);
 //                finallist.add(String.valueOf(c));
-                System.out.println("The fragment list value :" +finallist);
-                item1 = new ListItem();
-                item1.setItemName(c.optString("pro_name"));
-                item1.setItemCode(c.optString("pro_code"));
-                item1.setIteQuty(c.optString("pro_qty"));
-                item1.setItemRate("0");
-                item1.setIteQuty("0");
-                System.out.println("The jsonobject :" +c);
-                listForSearchConcepts.add(0,item1);
-                System.out.println("List item :" + listForSearchConcepts.toString());
-            }
-            adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
-                    myList.setAdapter(adapter1);
-                    System.out.println("The adapter list :" + String.valueOf(myList));
-                    myList.setScrollingCacheEnabled(true);
-                    adapter1.notifyDataSetChanged();
+                    System.out.println("The fragment list value :" + finallist);
+                    item1 = new ListItem();
+                    item1.setItemName(c.optString("pro_name"));
+                    item1.setItemCode(c.optString("pro_code"));
+                    item1.setIteQuty(c.optString("pro_qty"));
+                    item1.setItemRate("0");
+                    item1.setItemDisc("0");
+                    System.out.println("The jsonobject :" + c);
+                    listForSearchConcepts.add(0, item1);
+                    System.out.println("List item :" + listForSearchConcepts.toString());
+                }
+                adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
+                myList.setAdapter(adapter1);
+                System.out.println("The adapter list :" + String.valueOf(myList));
+                myList.setScrollingCacheEnabled(true);
+                adapter1.notifyDataSetChanged();
 
             /*RowCount = listForSearchConcepts.size();
             System.out.println("Size of List :" + RowCount);*/
-            RowCount = listForSearchConcepts.size();
-            System.out.println("Size of List :" + RowCount);
-            tex_rowCount.setText("RowCount :" + RowCount);
+                RowCount = listForSearchConcepts.size();
+                System.out.println("Size of List :" + RowCount);
+                tex_rowCount.setText("TotalCount :" + RowCount);
 
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        }catch (Exception e){
-            e.printStackTrace();
+
         }
 
 
     }
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DATE_PICKER_ID:
-
-                return new DatePickerDialog(this, pickerListener, year, month,day);
-        }
-        return null;
-    }
-
-
-    private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        @Override
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay)
-        {
-
-            year  = selectedYear;
-            month = selectedMonth;
-            day   = selectedDay;
-
-            // Show selected date
-            edt_date.setText(new StringBuilder().append(day)
-                    .append("-").append(month + 1).append("-").append(year)
-                    .append(""));
-
-            selected_date = edt_date.getText().toString();
-            final_date = selected_date;
-
-            System.out.println("Value Date"+selected_date);
-            Log.e("Test url", selected_date+""  );
-
-        }
-    };
-
 
     private void addVendorInformation() {
-
-
-               /* pname= edt_nameVendor.getText().toString();
-                pbill= edt_billNo.getText().toString();
-                pdate= edt_date.getText().toString();
-                System.out.println("The vendor is :" +pgodown);
-
-
-                partyname = "Pname :" + pname +",";
-                gname = "Gname :" + gcodee +",";
-                gdate = "Date :" + pdate +",";
-                pnobill = "Pbill :" + pbill;
-*/
-              /*  str_vendorInf = partyname + gname + gdate + pnobill;
-
-                System.out.println("the party name :"+partyname);
-                System.out.println("the gname :"+gname);
-                System.out.println("the date :"+gdate);
-                System.out.println("the pbill :"+pnobill);
-                System.out.println("the vendor :"+str_vendorInf);
-
-
-              */  /*party_name.setText("Party : " + pname);
-                godown_name.setText("Godown : " + gcodee );
-                bill_no.setText("BillNo : " + pbill);
-                bill_date.setText("Date : " + pdate);
-
-*/                if(!pname.equals("") && !pbill.equals("")  && !pdate.equals("")){
-                    Toast.makeText(Activity_Inward_Entry_Screen.this, "If Vendor Correct", Toast.LENGTH_SHORT).show();
+                if(!pname.equals("") && !pbill.equals("")  && !pdate.equals("")){
                     dialog.dismiss();
+
                 }
                 else {
-                    Toast.makeText(Activity_Inward_Entry_Screen.this, "Else Vendor not correct", Toast.LENGTH_SHORT).show();
                     dialog.show();
                 }
-
-
-        }
-
+    }
 
     private void Test() {
-        System.out.println("Test Part Open");
         purchaseItemName = edt_nameNew.getText().toString();
         purchaseCode = edt_itemCodeNew.getText().toString();
         purchQuty = edt_qutyNew.getText().toString();
         purRate = edt_rateNew.getText().toString();
         purDisc = edt_discountNew.getText().toString();
-
-        System.out.println("The final list is :" +String.valueOf(finallist));
-        purName =  "pro_name =" + purchaseItemName + ";";
-        purcode =  "pro_code =" + purchaseCode +  ";";
-        purQuty =  "pro_qty ="  + purchQuty +";";
-        purrate =  "pro_rate =" + purRate +";";
-        purdisc =  "pro_disc =" + purDisc;
-
-        str_addNew = "{" + purName + purcode +purQuty + purrate +purdisc +"}";
-        System.out.println("the value is addingg :" +str_addNew);
-        finallist.add(str_addNew);
 
         if (!purchaseItemName.equals("") && !purchaseCode.equals("") && !purchQuty.equals("") && !purRate.equals("") && !purDisc.equals("")) {
 
@@ -527,27 +462,30 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
             listForSearchConcepts.add(0, item);
             System.out.println("List Size1 :"+listForSearchConcepts.size());
             adapter = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
-            System.out.println("List Size2 :"+listForSearchConcepts.size());
+
             for (int i = 0; i < listForSearchConcepts.size(); i++) {
 
                 System.out.println("Count_loop :"+listForSearchConcepts.size());
-               myList.setAdapter(adapter);
-                //myList.setScrollingCacheEnabled(true);
+                myList.setAdapter(adapter);
+                myList.setScrollingCacheEnabled(true);
                 adapter.notifyDataSetChanged();
             }
 
             RowCount = listForSearchConcepts.size();
-            System.out.println("Size of List :" + RowCount);
-            tex_rowCount.setText("RowCount :" + RowCount);
+            tex_rowCount.setText("TotalCount :" + RowCount);
 
+            test = Integer.parseInt(purchQuty);
+            test2 = test + MyCustomAdapter.outQuty;
+            txt_total.setText(" Total Quantity : " + test2);
 
-        } else {
+        }
+        else
+        {
 
             Toast.makeText(Activity_Inward_Entry_Screen.this, R.string.dialogAdd_new, Toast.LENGTH_SHORT).show();
         }
-        System.out.println("Test Part Close");
-    }
 
+    }
 
 
     private class addNewTask extends AsyncTask<Void, Void, Void> {
@@ -560,18 +498,6 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
             restoredIp = prefs.getString("ip", null);
             System.out.println("wedew"+restoredIp);
 
-            SharedPreferences pref = getApplicationContext().getSharedPreferences("value", MODE_PRIVATE);
-            String value = pref.getString("Value", "");
-            System.out.println("Value Submit for update: "+ ""+value);
-
-            SharedPreferences prefsss = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            customvalue= prefsss.getString("Value", null);
-            System.out.println("hi Fragment One"+customvalue);
-
-
-            // http://space7cloud.com/automobiles/get_data.php
-            //http://space7cloud.com/automobiles/get_data.php?page=item_save&party_details={}&item_list={}
-
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .authority(restoredIp)//space7cloud.com//2//92.168.1.100//192.168.1.7
@@ -580,9 +506,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
                     .appendPath("get_data.php")
                     .appendQueryParameter("page", "item_save")
                     .appendQueryParameter("party_details", str_vendorInf)
-                    .appendQueryParameter("item_list", customvalue);
-            System.out.println("test url : " + customvalue);
-
+                    .appendQueryParameter("item_list", value);
+            System.out.println("test url : " + value);
+            System.out.println("test url : " + str_vendorInf);
             String myUrl = builder.build().toString();
             System.out.println("Value Submit Url  :" + myUrl);
             HttpClient httpclient = new DefaultHttpClient();
@@ -616,9 +542,6 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
                             itemc.setItemName(c.optString("name"));
                             itemc.setItemCode(c.optString("itemcode"));
 
-//                            listForSearchConcepts.add(0,item);
-
-//                            Log.i("myitemlist", listForSearchConcepts.toString());
 
                             String itemcode = c.optString("itemcode");
                             String itemname = c.optString("name");
@@ -659,7 +582,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void args) {
-            Toast.makeText(Activity_Inward_Entry_Screen.this,res,Toast.LENGTH_SHORT).show();
+            Toast.makeText(Activity_Inward_Entry_Screen.this," Updated ",Toast.LENGTH_SHORT).show();
+
 
         }
     }

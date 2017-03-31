@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.adairtechnology.sgsautomobile.Models.Godown;
 import com.adairtechnology.sgsautomobile.Models.Item;
 import com.adairtechnology.sgsautomobile.Models.ListItem;
 
@@ -25,6 +26,13 @@ public class DBController extends SQLiteOpenHelper {
     private static final String databasename = "iteminfo"; // Dtabasename
     private static final int versioncode = 1; //versioncode of the database
 
+    private static final String VendorTable = "tableofvendor";
+    private static final String PartyName = "nameofparty";
+    private static final String BillNo = "billNoofparty";
+    private static final String Date = "dateofparty";
+    private static final String GowdnCode ="vendorgodowncode";
+
+
     public DBController(Context context) {
         super(context, databasename, null, versioncode);
 
@@ -32,13 +40,17 @@ public class DBController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String query;
+        String query,vendorQuery;
         query = "CREATE TABLE IF NOT EXISTS " + tablename + "(" + id + " integer primary key, "
                                                                 + name + " text, "
                                                                 + quantity + " text, "
                                                                 + itemcode + " text)";
+
+        vendorQuery = "CREATE TABLE IF NOT EXISTS " + VendorTable + "(" + PartyName + " TEXT, " + BillNo + " TEXT, " + Date + " INTEGER ," + GowdnCode + " TEXT)";
         database.execSQL(query);
+        database.execSQL(vendorQuery);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old,
                           int current_version) {
@@ -46,8 +58,84 @@ public class DBController extends SQLiteOpenHelper {
         query = "DROP TABLE IF EXISTS " + tablename;
         database.execSQL(query);
         onCreate(database);
+
     }
 
+
+    public void delete(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(" delete from " +VendorTable);
+    }
+    public ArrayList<HashMap<String, String>> getNewVendor() {
+        ArrayList<HashMap<String, String>> wordList;
+        wordList = new ArrayList<HashMap<String, String>>();
+        String selectQuery = "SELECT  * FROM " + VendorTable;
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put(PartyName, cursor.getString(0));
+                map.put(BillNo, cursor.getString(1));
+                map.put(Date, cursor.getString(2));
+                map.put(GowdnCode,cursor.getString(3));
+                wordList.add(map);
+                System.out.println("The gowdown :" +String.valueOf(map));
+                System.out.println("The gowdown1 :" +map);
+                System.out.println("The gowdown :" +map.toString());
+
+                System.out.println("DBHelper: 0" + PartyName);
+                System.out.println("DBHelper: 1" + BillNo);
+                System.out.println("DBHelper 2" + Date);
+                System.out.println("DBHelper 2" + GowdnCode);
+
+                System.out.println("The gowdown :" +String.valueOf(wordList));
+                System.out.println("The gowdown1 :" +wordList);
+                System.out.println("The gowdown :" +wordList.toString());
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return wordList;
+    }
+    public ArrayList<Godown> getVendor() {
+        String selectqurey = "SELECT * FROM " + VendorTable;
+        ArrayList<Godown> vendorInfo = new ArrayList<Godown>();
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor c = database.rawQuery(selectqurey, null);
+        if (c != null) {
+            while (c.moveToNext()) {
+                String name = c.getString(c.getColumnIndex(PartyName));
+                String code = c.getString(c.getColumnIndex(GowdnCode));
+                String billno = c.getString(c.getColumnIndex(BillNo));
+                String date = c.getString(c.getColumnIndex(Date));
+
+                Godown godown = new Godown();
+                godown.setPartyName(name);
+                godown.setGcode(code);
+                godown.setPartyBillNo(billno);
+                godown.setPartyDate(date);
+
+                System.out.println("The gowdown :" +String.valueOf(godown));
+                System.out.println("The gowdown1 :" +godown);
+                System.out.println("The gowdown :" +godown.toString());
+
+                System.out.println("DBHelper: " + name);
+                System.out.println("DBHelper: " + code);
+                System.out.println("DBHelper " + billno);
+
+                vendorInfo.add(godown);
+                System.out.println("The gowdown :" +String.valueOf(vendorInfo));
+                System.out.println("The gowdown1 :" +vendorInfo);
+                System.out.println("The gowdown :" +vendorInfo.toString());
+
+
+            }
+        }
+        database.close();
+        return vendorInfo;
+    }
     /* Method for fetching record from Database (For all items into cardview or grid view using pojo class)*/
     public ArrayList<Item> getAllEmployee() {
         String selectQuery = "SELECT  * FROM " + tablename;
@@ -132,4 +220,30 @@ public class DBController extends SQLiteOpenHelper {
         // return contact list
         return wordList;
     }
+/*
+    public ArrayList<String> getAllPlace() {
+        ArrayList<String> wordList;
+        wordList = new ArrayList<String>();
+        String selectQuery = "SELECT  * FROM " + VendorTable;
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("id", cursor.getString(0));
+                map.put("name", cursor.getString(1));
+                map.put("quantity", cursor.getString(2));
+                map.put("itemcode", cursor.getString(3));
+
+                wordList.add(String.valueOf(map));
+            } while (cursor.moveToNext());
+        }
+        // return contact list
+        return wordList;
+    }
+*/
+
+
+
 }

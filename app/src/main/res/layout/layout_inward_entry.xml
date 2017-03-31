@@ -17,89 +17,120 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-           >
+            android:orientation="vertical">
 
             <TableLayout
                 android:id="@+id/textLinear"
+
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:scrollbars="horizontal"
-                android:weightSum="4" >
+                android:orientation="vertical" >
+
                 <TableRow
                     android:id="@+id/lvh"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:scrollbars="horizontal"
                     android:weightSum="4" >
 
 
-                <TextView
-                    android:id="@+id/txtplaceid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Code"
-                    android:background="@color/green_100"
-                    android:textColor="#000"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/txtCode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Code"
+                        android:background="@color/blue_200"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtplacename"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:gravity="center"
-                    android:text="Item"
-                    android:background="@color/blue_100"
-                    android:textColor="#000"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/txtname"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:background="@color/blue_100"
+                        android:text="Item"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtcountry"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Qty"
-                    android:background="@color/green_100"
-                    android:textColor="#000"
-                    android:textSize="15sp" />
-                <TextView
-                    android:id="@+id/txtcou"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Rate"
-                    android:background="@color/blue_100"
-                    android:textColor="#000"
-                    android:textSize="15sp" />
-                <TextView
-                    android:id="@+id/txtcoun"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Dis"
-                    android:background="@color/green_100"
-                    android:textColor="#000"
-                    android:textSize="15sp" />
-                <TextView
-                    android:id="@+id/txtcounrwer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Dle"
-                    android:background="@color/red_100"
-                    android:textColor="#000"
-                    android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtcountry"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Qty"
+                        android:background="@color/blue_200"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtcou"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Rate"
+                        android:background="@color/blue_100"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtcoun"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Dis"
+                        android:background="@color/blue_200"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="17dp"
+                        android:id="@+id/check_id"
+                        android:layout_weight="0.4"
+                        android:text="Del"
+                        android:textSize="15sp"
+                        android:gravity="center"/>
                 </TableRow>
+
             </TableLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="1"
+                android:layout_weight="35"
+                android:layout_marginTop="1dp"
+                android:visibility="visible"
+                android:id="@+id/relative_list"
+                android:layout_above="@+id/footer_rel_one"
+                android:layout_below="@+id/textLinear">
+
+
+                <ListView
+                    android:id="@+id/list_listView"
+                    android:layout_width="fill_parent"
+                    android:foregroundGravity="center"
+                    android:divider="@color/colorWhite"
+                    android:dividerHeight="1dp"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                </ListView>
+
+            </RelativeLayout>
+
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -121,32 +152,6 @@
                     android:layout_alignParentEnd="true" />
 
             </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:weightSum="1"
-                android:layout_weight="35"
-                android:visibility="visible"
-                android:id="@+id/relative_list"
-                android:layout_above="@+id/footer_rel_one"
-                android:layout_below="@+id/textLinear">
-
-
-                <ListView
-                    android:id="@+id/list_listView"
-                    android:layout_width="match_parent"
-                    android:foregroundGravity="center"
-                    android:divider="@color/colorWhite"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
-                </ListView>
-
-            </RelativeLayout>
-
 
 
             <RelativeLayout
@@ -244,6 +249,7 @@
                         android:layout_weight="2"
                         android:textColor="@color/colorWhite"
                         android:textSize="13sp"
+                        android:freezesText="true"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:text = "Party : "/>
@@ -251,6 +257,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:layout_weight="2"
+                        android:freezesText="true"
                         android:id="@+id/txtbillnumber"
                         android:textColor="@color/colorWhite"
                         android:textSize="13sp"
@@ -272,6 +279,7 @@
                         android:layout_height="20dp"
                         android:id="@+id/txtdate"
                         android:layout_weight="2"
+                        android:freezesText="true"
                         android:layout_marginLeft="3dp"
                         android:textColor="@color/colorWhite"
                         android:textSize="13sp"
@@ -280,6 +288,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:layout_weight="2"
+                        android:freezesText="true"
                         android:id="@+id/txtGodownname"
                         android:textColor="@color/colorWhite"
                         android:textSize="13sp"
@@ -292,7 +301,7 @@
             layout="@layout/prchase_entity_dialogbx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="50dp"
+            android:layout_margin="25dp"
             android:visibility="gone"/>
 
     </FrameLayout>

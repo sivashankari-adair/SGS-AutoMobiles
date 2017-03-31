@@ -1,26 +1,25 @@
 package com.adairtechnology.sgsautomobile.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.adairtechnology.sgsautomobile.ActivityClasses.Activity_Inward_Entry_Screen;
 import com.adairtechnology.sgsautomobile.Models.ListItem;
 import com.adairtechnology.sgsautomobile.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.adairtechnology.sgsautomobile.ActivityClasses.Activity_Inward_Entry_Screen.txt_total;
 
 /**
  * Created by AndroidTeam2 on 2/13/2017.
@@ -31,16 +30,12 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
     private ArrayList<ListItem> arraylist;
     private List<ListItem> itemList;//arrayList.addAll(itemlist)
     private Context mContext;
-    private String code;
-    private String name;
-    private String qty;
-    private String rate;
-    private String dist;
-    private String purName;
-    private String purcode;
-    private String purQuty;
-    private String purrate;
-    private static ArrayList<String> testItem;
+    public static int outQuty;
+    public int test2 = 0;
+//    public static int test;
+
+     ArrayList<String> testItem = new ArrayList<>();
+    private List<String> list;
 
     private String all_details;
     SharedPreferences pref;
@@ -74,22 +69,59 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
     }
 
 @Override
-
 public View getView(final int position, View view, ViewGroup viewGroup) {
+    String code,name,quentity,rate,dist;
+    String purName,purcode,purQuty,purrate,purdist;
+    int test;
 
-    final ViewHolder holder;
+
+     final ViewHolder holder;
     System.out.println("The Entry open");
     if (view == null) {
+        view = LayoutInflater.from(mContext).inflate(R.layout.activity_item, viewGroup, false);
         holder = new ViewHolder();
+       /* holder = new ViewHolder();
 
         LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
         view = inflater.inflate(R.layout.activity_item,viewGroup,false);
-        holder.itemname = (TextView) view.findViewById(R.id.txtname);
+       */ holder.itemname = (TextView) view.findViewById(R.id.txtname);
         holder.itemcode = (TextView) view.findViewById(R.id.txtCode);
         holder.itemqut = (TextView) view.findViewById(R.id.txtcountry);
         holder.itemdis = (TextView) view.findViewById(R.id.txtcou);
         holder.itemrate = (TextView) view.findViewById(R.id.txtcoun);
         holder.img_delete = (ImageView)view.findViewById(R.id.check_id);
+
+           /* code =itemList.get(position).getItemCode();
+            name = itemList.get(position).getItemName();
+            quentity  = itemList.get(position).getIteQuty();
+            rate = itemList.get(position).getItemRate();
+            dist = itemList.get(position).getItemDisc();*/
+
+            code =itemList.get(position).itemCode;
+            name = itemList.get(position).itemName;
+            quentity  = itemList.get(position).iteQuty;
+            rate = itemList.get(position).itemRate;
+            dist = itemList.get(position).itemDisc;
+
+            purName =  "pro_name =" + name + ";";
+            purcode =  "pro_code =" + code +  ";";
+            purQuty =  "pro_qty ="  + quentity +";";
+            purrate =  "pro_rate =" + rate +";";
+            purdist = "pro_disc =" + dist ;
+
+            String all_details = "{"+purName + purcode + purQuty+ purrate+ purdist+"}";
+            testItem.add(all_details);
+            notifyDataSetChanged();
+            System.out.println("The custom finalist : "+testItem);
+
+            SharedPreferences pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("ItemListFinalValue", String.valueOf(testItem));
+            editor.clear();
+            editor.commit();
+
+
+
 
         holder.img_delete.setTag(position);
         System.out.println(" The Position :" +position);
@@ -97,24 +129,48 @@ public View getView(final int position, View view, ViewGroup viewGroup) {
         holder.img_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer integer = (Integer)v.getTag();
-                System.out.println("INTger Valu " + integer);
-                Integer integer1 = Activity_Inward_Entry_Screen.RowCount - integer;
-                System.out.println("INTger Valu " + integer1);
-                itemList.remove(position);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        mContext);
 
-                notifyDataSetChanged();
+                alertDialogBuilder.setTitle("Delete");
+
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                itemList.remove(position);
+                                notifyDataSetChanged();
+
+                            }
+                        })
+                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                alertDialog.show();
+
             }
         });
+        test = Integer.parseInt(itemList.get(position).getIteQuty());
+        test2 = test2 + test;
+        outQuty =test2;
+        txt_total.setText(" Total Quantity : " + outQuty);
 
 
         view.setTag(holder);
         System.out.println("The adapter if condtion ");
-
+//        testItem.clear();
     }
-    else {
+    else
+    {
         holder = (ViewHolder)view.getTag();
         System.out.println("The adapter else condion");
+
     }
 
             holder.itemcode.setText(itemList.get(position).getItemCode());
@@ -123,55 +179,30 @@ public View getView(final int position, View view, ViewGroup viewGroup) {
             holder.itemrate.setText(itemList.get(position).getItemRate());
             holder.itemdis.setText(itemList.get(position).getItemDisc());
 
-            code = holder.itemcode.getText().toString();
-            name = holder.itemname.getText().toString();
+//            testItem.clear();
+
+            /*name = holder.itemname.getText().toString();
             qty  = holder.itemqut.getText().toString();
             rate = holder.itemrate.getText().toString();
             dist = holder.itemdis.getText().toString();
 
-            System.out.println("The jsonobject :" +code);
-            System.out.println("The jsonobject :" +name);
-            System.out.println("The jsonobject :" +qty);
-            System.out.println("The jsonobject :" +rate);
-            System.out.println("The jsonobject :" +dist);
+            purName =  "pro_name =" + name + ";";
+            purcode =  "pro_code =" + code +  ";";
+            purQuty =  "pro_qty ="  + qty +";";
+            purrate =  "pro_rate =" + rate +";";
 
-            if(!code.equals("") && !name.equals("")){
-                System.out.println("The have value fom if condition");
-                purName =  "pro_name =" + name + ";";
-                purcode =  "pro_code =" + code +  ";";
-                purQuty =  "pro_qty ="  + qty +";";
-                purrate =  "pro_rate =" + rate +";";
-                String purdisc = "pro_disc =" + dist;
+            String all_details = "{"+purName + purcode + purQuty+ purrate+"}";
+            System.out.println("The custom finalist : "+all_details);
+            */
+            System.out.println("The Entry close");
 
-                testItem = new ArrayList<String>();
-                all_details = "{"+purName + purcode + purQuty+ purrate+ purdisc +"}";
-                System.out.println("the sen value is :" +all_details);
-                testItem.add(all_details);
 
-//                arrayList.addAll(itemlist);
 
-                pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-                editor = pref.edit();
-                editor.putString("Value", String.valueOf(testItem));
-                System.out.println("The mycustom adapter is :" +testItem);
-                editor.commit();
-
-//                testItem.clear();
-//                testItem.clear();
-            }
-            else
-            {
-                System.out.println("The dont have a vale else condtion");
-
-            }
-    System.out.println("The Entry close");
-//    testItem.clear();
-    editor.clear();
 
     return view;
     }
 
-    protected class ViewHolder {
+    class ViewHolder {
 
         TextView itemname, itemcode,itemqut,itemdis,itemrate;
         protected ImageView img_delete;

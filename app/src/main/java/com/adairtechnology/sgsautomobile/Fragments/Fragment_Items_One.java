@@ -34,6 +34,7 @@ import com.adairtechnology.sgsautomobile.Models.ListItem;
 import com.adairtechnology.sgsautomobile.R;
 import com.adairtechnology.sgsautomobile.Utils.EndPoints;
 import com.adairtechnology.sgsautomobile.Utils.HttpHandler;
+import com.adairtechnology.sgsautomobile.Utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,52 +102,9 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
         }
         itemshopAdapter = new ItemCartAdapter(mContext, itemNameArrayList);
         itemProgressBar = (ProgressBar) rootView.findViewById(R.id.itemProgressBar);
-        new GetItemList().execute();
 
-       /* SharedPreferences prefse = this.getActivity().getSharedPreferences("MYPReEFF",Context.MODE_PRIVATE);
-        updateinfo = prefse.getString("updateInfo", null);
-        System.out.println("test update info "+updateinfo);
+        ItemListFragm();
 
-        List<Item> listForSearchConcepts = new ArrayList<Item>();
-        try {
-            JSONObject jsonObjj = new JSONObject(updateinfo);
-            String res = jsonObjj.getString("status");
-            String gstatus_code = jsonObjj.getString("0M50PB1QA");
-            System.out.println("hfdfdfh" + gstatus_code);
-            System.out.println("hdfh" + res);
-
-            //Getting JSON ARRAY for Items
-            JSONObject Godown_jsonobjj = jsonObjj.getJSONObject("0M50PB1QA");
-            System.out.println("hdfhsdsd" + Godown_jsonobjj);
-
-            JSONArray Godown_list_items_jsonobjj = Godown_jsonobjj.getJSONArray("items");
-            for (int j = 0; j < Godown_list_items_jsonobjj.length(); j++) {
-                JSONObject c = Godown_list_items_jsonobjj.getJSONObject(j);
-
-                Item itemc = new Item();
-                itemc.setQty(c.optString("qty"));
-                itemc.setName(c.optString("name"));
-                itemc.setItemcode(c.optString("itemcode"));
-                listForSearchConcepts.add(itemc);
-
-            }
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }*/
-       /* itemshopAdapter = new ItemCartAdapter(mContext, (ArrayList<Item>)listForSearchConcepts);
-        shopRcyclerView.setAdapter(itemshopAdapter);
-*/
-
-
-       /* DBController databaseHelper = new DBController(getContext());
-        employeeList = new ArrayList<Item>();
-
-        employeeList = databaseHelper.getAllEmployee();
-        itemshopAdapter = new ItemCartAdapter(mContext, employeeList);
-        shopRcyclerView.setAdapter(itemshopAdapter);
-*/
-       // new GetItemList().execute();
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         shopRcyclerView.setLayoutManager(mLayoutManager);
         shopRcyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -182,6 +140,14 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
         String text_search = FragmentHome.search_text;
         System.out.println("hi Search"+ text_search);
         return rootView;
+    }
+
+    private void ItemListFragm() {
+        if(!Utils.isNetworkAvailable(mContext)){
+            Toast.makeText(mContext, "No Network Connection", Toast.LENGTH_SHORT).show();
+        }
+        new GetItemList().execute();
+
     }
 
 
@@ -241,6 +207,9 @@ public class Fragment_Items_One  extends Fragment implements Serializable {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+            else {
+                Toast.makeText(mContext, "Network Is Not Avialable", Toast.LENGTH_SHORT).show();
             }
 
             return null;

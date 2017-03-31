@@ -136,9 +136,9 @@ public class ReportActivity extends AppCompatActivity {
 
                         ItemReport item = new ItemReport();
                         item.setId(c.optString("Id"));
-                        item.setQty(c.optString("Qty"));
                         item.setName(c.optString("Item"));
                         item.setItemcode(c.optString("Code"));
+                        item.setQty(c.optString("Qty"));
                         item.setRate(c.optString("Rate"));
                         item.setDiscount(c.optString("Idisc"));
                         listForSearchConcepts.add(item);

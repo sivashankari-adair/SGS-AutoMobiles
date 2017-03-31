@@ -22,7 +22,6 @@
             android:ems="3"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"
-            android:text="Akii"
             android:hint="@string/hint_party_name">
         </EditText>
     </android.support.design.widget.TextInputLayout>
@@ -44,7 +43,6 @@
             android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="23"
             android:hint="@string/hint_bill_number">
         </EditText>
     </android.support.design.widget.TextInputLayout>
@@ -58,7 +56,6 @@
         android:layout_width="223dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:weightSum="1">
 
         <EditText

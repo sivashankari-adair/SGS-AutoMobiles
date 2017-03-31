@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.adairtechnology.sgsautomobile.Db.DBController;
 import com.adairtechnology.sgsautomobile.Models.Item;
 import com.adairtechnology.sgsautomobile.R;
+import com.adairtechnology.sgsautomobile.Utils.Utils;
 import com.github.silvestrpredko.dotprogressbar.DotProgressBar;
 
 import org.apache.http.HttpResponse;
@@ -109,10 +110,16 @@ LoginActivity extends AppCompatActivity {
                 upass = password.getText().toString();
                 Log.i("uname", uname + "" + upass);
 
-                GetLoginDetails();
-                Intent intent = new Intent(LoginActivity.this,HomeScreenActivity.class);
-                startActivity(intent);
-                finish();
+
+                if(!Utils.isNetworkAvailable(LoginActivity.this)){
+                    Toast.makeText(LoginActivity.this, "No Network Connection", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    GetLoginDetails();
+                    Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
 
             }
@@ -238,42 +245,6 @@ LoginActivity extends AppCompatActivity {
             }
             System.out.println("login godown :" +gcode);
 
-         /*   //Getting JSON ARRAY for Items
-            JSONObject Godown_jsonobjj = jsonObjj.getJSONObject("Godown");
-            JSONObject Godown_list_jsonobjj = Godown_jsonobjj.getJSONObject(gcode);
-            JSONArray Godown_list_items_jsonobjj = Godown_list_jsonobjj.getJSONArray("items");
-            for (int j = 0; j < Godown_list_items_jsonobjj.length(); j++) {
-                JSONObject c = Godown_list_items_jsonobjj.getJSONObject(j);
-
-                Item item = new Item();
-                item.setId(c.optString("id"));
-                item.setQty(c.optString("qty"));
-                item.setName(c.optString("name"));
-                item.setItemcode(c.optString("itemcode"));
-                item.setFont(c.optString("font"));
-                listForSearchConcepts.add(item);
-                Log.i("myitemlist",listForSearchConcepts.toString());
-
-                String itemcode = c.optString("itemcode");
-                String itemname = c.optString("name");
-                String itemfont = c.optString("font");
-                String itemid = c.optString("id");
-                String itemqty = c.optString("qty");
-
-                DBController controller = new DBController(LoginActivity.this);
-                SQLiteDatabase db = controller.getWritableDatabase();
-                ContentValues cv2 = new ContentValues();
-
-                cv2.put("name", itemname);
-                cv2.put("itemcode", itemcode);
-                cv2.put("quantity", itemqty);
-                db.insert("items", null, cv2);
-                db.close();
-
-                System.out.println("test_cv2"+cv2);
-            }
-
-*/
 
 
 

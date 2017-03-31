@@ -6,16 +6,12 @@
 
     <TableRow
         android:id="@+id/lvh"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:scrollbars="horizontal"
         android:weightSum="4" >
 
-        <View
-            android:background="@color/pink_300"
-            android:layout_height="match_parent"
-            android:layout_width="1dp"/>
 
         <TextView
             android:id="@+id/txtCode"
@@ -24,13 +20,9 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="1"
-            android:layout_margin="1dp"
+            android:background="@color/blue_200"
             android:textColor="@color/black"
             android:textSize="13sp" />
-        <View
-            android:background="@color/pink_300"
-            android:layout_height="match_parent"
-            android:layout_width="1dp"/>
 
         <TextView
             android:id="@+id/txtname"
@@ -38,13 +30,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
             android:gravity="center"
+            android:background="@color/blue_100"
             android:text="Barcelona"
             android:textColor="@color/black"
             android:textSize="13sp" />
-        <View
-            android:background="@color/pink_300"
-            android:layout_height="match_parent"
-            android:layout_width="1dp"/>
 
 
         <TextView
@@ -54,12 +43,9 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="Spain"
+            android:background="@color/blue_200"
             android:textColor="@color/black"
             android:textSize="13sp" />
-        <View
-            android:background="@color/pink_300"
-            android:layout_height="match_parent"
-            android:layout_width="1dp"/>
 
         <TextView
             android:id="@+id/txtcou"
@@ -68,12 +54,9 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="Spain"
+            android:background="@color/blue_100"
             android:textColor="@color/black"
             android:textSize="13sp" />
-        <View
-            android:background="@color/pink_300"
-            android:layout_height="match_parent"
-            android:layout_width="1dp"/>
 
         <TextView
             android:id="@+id/txtcoun"
@@ -82,29 +65,16 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="Spain"
+            android:background="@color/blue_200"
             android:textColor="@color/black"
             android:textSize="13sp" />
-        <View
-            android:background="@color/pink_300"
-            android:layout_height="match_parent"
-            android:layout_width="1dp"/>
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="1dp"
+            android:layout_height="17dp"
             android:id="@+id/check_id"
             android:layout_weight="0.4"
-            android:src="@drawable/deletered"
-
-           />
-
-        <View
-            android:background="@color/pink_300"
-            android:layout_height="match_parent"
-            android:layout_width="1dp"/>
-
-
-
+            android:src="@drawable/deletered" />
     </TableRow>
 
 </TableLayout>

@@ -7,7 +7,10 @@ package com.adairtechnology.sgsautomobile.Models;
 public class Godown {
 
     private String gcode;
-    private String godown;
+    private String partyName;
+    private String partyBillNo;
+    private String partyDate;
+
 
     public String getGcode() {
         return gcode;
@@ -16,12 +19,28 @@ public class Godown {
         this.gcode = gcode;
     }
 
-   public String getGodown() {
-        return godown;
-    }
-   public void setGodown(String godown) {
-        this.godown = godown;
+
+    public String getPartyName() {
+        return partyName;
     }
 
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
+    }
 
+    public String getPartyBillNo() {
+        return partyBillNo;
+    }
+
+    public void setPartyBillNo(String partyBillNo) {
+        this.partyBillNo = partyBillNo;
+    }
+
+    public String getPartyDate() {
+        return partyDate;
+    }
+
+    public void setPartyDate(String partyDate) {
+        this.partyDate = partyDate;
+    }
 }

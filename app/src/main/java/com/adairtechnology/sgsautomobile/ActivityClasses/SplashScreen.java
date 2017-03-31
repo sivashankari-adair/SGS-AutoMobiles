@@ -7,8 +7,10 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.adairtechnology.sgsautomobile.R;
+import com.adairtechnology.sgsautomobile.Utils.Utils;
 
 /**
  * Created by Android-Team1 on 1/4/2017.
@@ -32,15 +34,30 @@ public class SplashScreen extends AppCompatActivity {
                 String restoredTextEmail = prefs.getString("UserName", null);
                 String restoredTextPassword = prefs.getString("Password", null);
 
-                if (restoredTextEmail != null && restoredTextPassword != null) {
-                    Intent mainIntent = new Intent(SplashScreen.this, HomeScreenActivity.class);
-                    SplashScreen.this.startActivity(mainIntent);
-                    SplashScreen.this.finish();
-                } else {
-                    Intent mainIntent = new Intent(SplashScreen.this, LoginActivity.class);
-                    SplashScreen.this.startActivity(mainIntent);
-                    SplashScreen.this.finish();
-                }
+                if (!Utils.isNetworkAvailable(SplashScreen.this)){
+                    Toast.makeText(SplashScreen.this, "No Network Connection", Toast.LENGTH_SHORT).show();
+                    if (restoredTextEmail != null && restoredTextPassword != null) {
+                        Intent mainIntent = new Intent(SplashScreen.this, HomeScreenActivity.class);
+                        SplashScreen.this.startActivity(mainIntent);
+                        SplashScreen.this.finish();
+                    } else {
+                        Intent mainIntent = new Intent(SplashScreen.this, LoginActivity.class);
+                        SplashScreen.this.startActivity(mainIntent);
+                        SplashScreen.this.finish();
+                    }
+            }
+                else {
+                    Toast.makeText(SplashScreen.this, " Connection Avilable " , Toast.LENGTH_SHORT).show();
+                    if (restoredTextEmail != null && restoredTextPassword != null) {
+                        Intent mainIntent = new Intent(SplashScreen.this, HomeScreenActivity.class);
+                        SplashScreen.this.startActivity(mainIntent);
+                        SplashScreen.this.finish();
+                    } else {
+                        Intent mainIntent = new Intent(SplashScreen.this, LoginActivity.class);
+                        SplashScreen.this.startActivity(mainIntent);
+                        SplashScreen.this.finish();
+                    }
+               }
             }
         }, SPLASH_DISPLAY_LENGTH);
 

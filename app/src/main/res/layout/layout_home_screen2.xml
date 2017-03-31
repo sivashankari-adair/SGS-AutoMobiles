@@ -225,7 +225,7 @@
                     android:id="@+id/text4"
                     style="@style/ImageTitle"
                     android:layout_alignParentBottom="true"
-                    android:text="Inward Entry"
+                    android:text="Setting"
                     android:textSize="12sp" />
             </RelativeLayout>
 
@@ -255,7 +255,7 @@
                     android:id="@+id/text5"
                     style="@style/ImageTitle"
                     android:layout_alignParentBottom="true"
-                    android:text="Entry"
+                    android:text="About"
                     android:textSize="12sp" />
             </RelativeLayout>
 
