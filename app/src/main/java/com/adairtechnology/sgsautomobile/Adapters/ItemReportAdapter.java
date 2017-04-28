@@ -1,6 +1,8 @@
 package com.adairtechnology.sgsautomobile.Adapters;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import java.util.List;
         LayoutInflater inflater;
         private static int added_value;
         private ArrayList<String> cartItem = new ArrayList<String>();
+      public String[] Current;
         public ItemReportAdapter(Context mContext, List<ItemReport> itemNameArrayList) {
             super(mContext,0);
 
@@ -61,7 +64,7 @@ import java.util.List;
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
-        final ItemReport item = getItem(position);
+//        final ItemReport item = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.layout_items_card_for_report, parent, false);
 
@@ -85,6 +88,7 @@ import java.util.List;
         viewHolder.name_report.setText(mDataset.get(position).getName());
         viewHolder.discount_report.setText(mDataset.get(position).getDiscount());
         viewHolder.rate_report.setText(mDataset.get(position).getRate());
+
 
 
 

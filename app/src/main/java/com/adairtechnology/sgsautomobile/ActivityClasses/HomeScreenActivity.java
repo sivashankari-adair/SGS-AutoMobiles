@@ -93,11 +93,16 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
             {
                 case R.id.relative1:
                     Intent in=new Intent(HomeScreenActivity.this,Activity_Inward_Entry_Screen.class);
+                    in.putExtra("Inward","InwardEntry");
                     startActivity(in);
                     finish();
                     break;
 
                 case R.id.relative2:
+                    Intent intent=new Intent(HomeScreenActivity.this,Activity_Inward_Entry_Screen.class);
+                    intent.putExtra("Inward"," ");
+                    startActivity(intent);
+                    finish();
                     Toast.makeText(HomeScreenActivity.this,"Under Construction",Toast.LENGTH_SHORT).show();
                     break;
 

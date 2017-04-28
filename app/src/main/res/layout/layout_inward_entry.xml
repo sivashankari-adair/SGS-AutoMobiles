@@ -10,86 +10,108 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linear_spinner"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinner_godown_name"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_margin="5dp"
+            android:popupBackground="@color/logout"
+            android:layout_weight="1"
+            android:layout_height="35dp"/>
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:id="@+id/searchitem"
+            android:layout_weight="2"
+            android:hint=" Search..."
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:drawableRight="@drawable/magnify"
+            android:background="@drawable/backgroundlogin"
+            android:layout_margin="5dp">
+        </EditText>
+
+    </LinearLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/frame_lay">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/relHeader" >
 
-            <TableLayout
+            <LinearLayout
                 android:id="@+id/textLinear"
-
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                >
 
-                <TableRow
-                    android:id="@+id/lvh"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/linerheader"
+                    android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:scrollbars="horizontal"
-                    android:weightSum="4" >
+                    android:weightSum="4"
+                    android:visibility="gone">
 
 
                     <TextView
-                        android:id="@+id/txtCode"
+                        android:id="@+id/txtsCodes"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:gravity="center"
                         android:text="Code"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:background="@color/blue_200"
                         android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/txtname"
+                        android:id="@+id/txtsnames"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
+                        android:layout_weight="2.5"
                         android:gravity="center"
                         android:background="@color/blue_100"
-                        android:text="Item"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Item name"
                         android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
 
                     <TextView
-                        android:id="@+id/txtcountry"
+                        android:id="@+id/txtsQuty"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:gravity="center"
-                        android:text="Qty"
+                        android:text="Quty"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:background="@color/blue_200"
                         android:textColor="@color/black"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/txtcou"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Rate"
-                        android:background="@color/blue_100"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/txtcoun"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Dis"
-                        android:background="@color/blue_200"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="1dp"
@@ -99,9 +121,103 @@
                         android:text="Del"
                         android:textSize="15sp"
                         android:gravity="center"/>
-                </TableRow>
+                </LinearLayout>
 
-            </TableLayout>
+                <LinearLayout
+                    android:id="@+id/txtoflinear"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:scrollbars="horizontal"
+                    android:weightSum="4"
+                    android:visibility="gone">
+
+
+                    <TextView
+                        android:id="@+id/txtCodes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Code"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@color/blue_200"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/txtnames"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:background="@color/blue_100"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Itemname"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+
+                    <TextView
+                        android:id="@+id/txtQuty"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Quty"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@color/blue_200"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/txtRate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Rate"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@color/blue_100"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/txtDisc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Disc"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@color/blue_200"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="17dp"
+                        android:id="@+id/checks_id"
+                        android:layout_weight="0.4"
+                        android:text="Del"
+                        android:textSize="15sp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -112,9 +228,8 @@
                 android:layout_marginTop="1dp"
                 android:visibility="visible"
                 android:id="@+id/relative_list"
-                android:layout_above="@+id/footer_rel_one"
-                android:layout_below="@+id/textLinear">
-
+                android:layout_below="@+id/textLinear"
+                android:layout_above="@+id/footer_rel_one">
 
                 <ListView
                     android:id="@+id/list_listView"
@@ -122,8 +237,7 @@
                     android:foregroundGravity="center"
                     android:divider="@color/colorWhite"
                     android:dividerHeight="1dp"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentTop="true"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
                 </ListView>
@@ -156,17 +270,21 @@
 
             <RelativeLayout
                 android:id="@+id/footer_rel_one"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 android:layout_above="@+id/real_footer_sec"
                 android:layout_marginBottom="2dp">
 
                 <LinearLayout
                     android:id="@+id/liner_footer"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    >
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true">
+
                     <Button
                         android:layout_width="50dp"
                         android:layout_height="30dp"
@@ -180,7 +298,20 @@
                         android:background="@color/colorPrimary"
                         android:textColor="@color/colorWhite"
                         android:textSize="12sp" />
-
+                  <!--  <Button
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/btn_report"
+                        android:text="Report"
+                        android:padding="5sp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="0.14"
+                        android:layout_marginRight="2dp"
+                        android:textAllCaps="false"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12sp" />
+-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
@@ -206,11 +337,10 @@
                         android:layout_width="50dp"
                         android:layout_height="30dp"
                         android:id="@+id/update"
-                        android:text="update"
-                        android:padding="5sp"
+                        android:text="Update"
+                        android:padding="5dp"
                         android:layout_marginTop="2dp"
                         android:layout_weight="0.14"
-                        android:layout_marginRight="2dp"
                         android:textAllCaps="false"
                         android:background="@color/colorPrimary"
                         android:textColor="@color/colorWhite"
@@ -220,10 +350,6 @@
                 </LinearLayout>
 
             </RelativeLayout>
-
-
-
-
 
             <RelativeLayout
                 android:layout_width="match_parent"

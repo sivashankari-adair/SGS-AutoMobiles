@@ -72,11 +72,11 @@ public class FragmentHome extends Fragment {
 
         mTabHost.addTab(mTabHost.newTabSpec("fragmentAll").setIndicator("ALL"),
                 Fragment_Items_One.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("fragmentFavorite").setIndicator("LIMIT1"),
+     /*   mTabHost.addTab(mTabHost.newTabSpec("fragmentFavorite").setIndicator("LIMIT1"),
                 Fragment_Items_Two.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("fragmentOffers").setIndicator("LIMIT2"),
                 Fragment_Items_Three.class, null);
-
+*/
         mTabHost.getTabWidget().setDividerDrawable(null); // android:showDividers="none" - in xml
 
         for(int i=0;i<mTabHost.getTabWidget().getChildCount();i++)

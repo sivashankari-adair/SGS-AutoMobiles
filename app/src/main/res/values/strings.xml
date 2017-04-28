@@ -23,5 +23,7 @@
     <string name="btn_reportOk">Ok</string>
     <string name="dialogAdd_new">Please Fill All Item</string>
     <string name="hint_party_code">Godown Code</string>
+    <string name="TileInward">Inward Entry</string>
+    <string name="TilePurchase">Purchase Entry</string>
 
 </resources>

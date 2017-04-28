@@ -11,6 +11,9 @@ public class Item {
     public String qty;
     public String itemcode;
     public String font;
+    public String mrb;
+    public Float dis;
+
 
     public String getName() {
         return name;
@@ -47,4 +50,19 @@ public class Item {
         this.font = font;
     }
 
+    public String getMrb() {
+        return mrb;
+    }
+
+    public void setMrb(String mrb) {
+        this.mrb = mrb;
+    }
+
+    public Float getDis() {
+        return dis;
+    }
+
+    public void setDis(Float dis) {
+        this.dis = dis;
+    }
 }

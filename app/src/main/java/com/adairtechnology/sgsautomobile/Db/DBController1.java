@@ -34,6 +34,11 @@ public class DBController1 extends SQLiteOpenHelper {
         database.execSQL(query);
     }
 
+    public void delete(){
+        SQLiteDatabase db = this.getWritableDatabase();
+//        db.execSQL(" delete from " +VendorTable);
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old,
                           int current_version) {

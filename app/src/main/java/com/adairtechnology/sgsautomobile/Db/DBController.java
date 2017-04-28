@@ -5,10 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.EditText;
 
+import com.adairtechnology.sgsautomobile.ActivityClasses.Activity_Inward_Entry_Screen;
+import com.adairtechnology.sgsautomobile.Fragments.Fragment_Items_One;
 import com.adairtechnology.sgsautomobile.Models.Godown;
 import com.adairtechnology.sgsautomobile.Models.Item;
 import com.adairtechnology.sgsautomobile.Models.ListItem;
+import com.adairtechnology.sgsautomobile.Models.NewItemList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +22,7 @@ import java.util.HashMap;
  */
 
 public class DBController extends SQLiteOpenHelper {
+
     private static final String tablename = "items";  // table name
     private static final String name = "name";  // column name
     private static final String id = "ID";  // auto generated ID column
@@ -26,11 +31,23 @@ public class DBController extends SQLiteOpenHelper {
     private static final String databasename = "iteminfo"; // Dtabasename
     private static final int versioncode = 1; //versioncode of the database
 
+    //VENDOR INFORMATION DB
     private static final String VendorTable = "tableofvendor";
     private static final String PartyName = "nameofparty";
     private static final String BillNo = "billNoofparty";
     private static final String Date = "dateofparty";
     private static final String GowdnCode ="vendorgodowncode";
+
+    //ALL ITEM DB
+    private static final String ItemTable = "tableofitems";
+    private static final String ItemCodes = "codeoditem";
+    private static final String ItemName = "nameofitem";
+    private static final String ItemRate = "rateofitem";
+    private static final String ItemDiscount ="discofitem";
+    private static final String ItemQuantity = "qtyofitem";
+    private static final String ItemTotalRate ="toalrateofitem";
+
+
 
 
     public DBController(Context context) {
@@ -40,15 +57,21 @@ public class DBController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String query,vendorQuery;
+        String query,vendorQuery,itemQuery;
         query = "CREATE TABLE IF NOT EXISTS " + tablename + "(" + id + " integer primary key, "
                                                                 + name + " text, "
                                                                 + quantity + " text, "
                                                                 + itemcode + " text)";
 
-        vendorQuery = "CREATE TABLE IF NOT EXISTS " + VendorTable + "(" + PartyName + " TEXT, " + BillNo + " TEXT, " + Date + " INTEGER ," + GowdnCode + " TEXT)";
+        vendorQuery = "CREATE TABLE IF NOT EXISTS " + VendorTable + "(" + PartyName + " TEXT, "
+                        + BillNo + " TEXT, " + Date + " INTEGER ," + GowdnCode + " TEXT)";
+
+        itemQuery = "CREATE TABLE IF NOT EXISTS " + ItemTable + "(" + ItemCodes + " TEXT, "
+                    + ItemName + " TEXT, " + ItemQuantity + " TEXT, " + ItemRate + " TEXT, "
+                    + ItemDiscount + " TEXT, " + ItemTotalRate + " TEXT)";
         database.execSQL(query);
         database.execSQL(vendorQuery);
+        database.execSQL(itemQuery);
     }
 
     @Override
@@ -62,9 +85,10 @@ public class DBController extends SQLiteOpenHelper {
     }
 
 
-    public void delete(){
+    public  void delete(){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(" delete from " +VendorTable);
+        db.execSQL(" delete from " +tablename);
+        db.execSQL(" delete from " + ItemTable);
     }
     public ArrayList<HashMap<String, String>> getNewVendor() {
         ArrayList<HashMap<String, String>> wordList;
@@ -95,10 +119,186 @@ public class DBController extends SQLiteOpenHelper {
                 System.out.println("The gowdown :" +wordList.toString());
             } while (cursor.moveToNext());
         }
-
-        // return contact list
         return wordList;
     }
+
+    public ArrayList<Item> getItems(){
+        String selectqurey = "SELECT * FROM " + ItemTable;
+        ArrayList<Item> ItemInfo = new ArrayList<Item>();
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor c = database.rawQuery(selectqurey, null);
+        if (c != null) {
+            while (c.moveToNext()) {
+                String code = c.getString(c.getColumnIndex(ItemCodes));
+                String name = c.getString(c.getColumnIndex(ItemName));
+                String disc = c.getString(c.getColumnIndex(ItemDiscount));
+                String quty = c.getString(c.getColumnIndex(ItemQuantity));
+                String rates = c.getString(c.getColumnIndex(ItemRate));
+
+                System.out.println("The item is : " +code);
+                System.out.println("The item is : " +name);
+                System.out.println("The item is : " +quty);
+                System.out.println("The item is : " +rates);
+
+                Item listItem = new Item();
+                listItem.setItemcode(code);
+                listItem.setName(name);
+                listItem.setMrb(rates);
+                listItem.setQty(quty);
+                ItemInfo.add(listItem);
+
+            }
+        }
+        database.close();
+        return ItemInfo;
+
+    }
+
+    public ArrayList<HashMap<String, String>> getItemDetails() {
+        ArrayList<HashMap<String, String>> wordList;
+        wordList = new ArrayList<HashMap<String, String>>();
+        String codes = Activity_Inward_Entry_Screen.codeEdt;
+        String selectQuery = "SELECT * FROM " + ItemTable +" WHERE " + ItemCodes +" = '" +codes +"'";
+        System.out.println("selection query : " + selectQuery);
+
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        String name1 = cursor.toString();
+        System.out.println("selection query result : " + name1);
+
+
+            if (cursor.moveToFirst()) {
+                do {
+                    String name = cursor.getString(cursor.getColumnIndex(ItemRate));
+                    System.out.println("The name is :" + name);
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("codeoditem", cursor.getString(cursor.getColumnIndex(ItemCodes)));
+                    map.put("nameofitem", cursor.getString(cursor.getColumnIndex(ItemName)));
+                    map.put("rateofitem", cursor.getString(cursor.getColumnIndex(ItemRate)));
+
+
+                    wordList.add(map);
+
+                } while (cursor.moveToNext());
+            }
+        // return contact list
+        return wordList;
+
+    }
+
+    public ArrayList<Item> searchItemCode() {
+        ArrayList<Item> itemList;
+        itemList = new ArrayList<Item>();
+        String searchKey = Fragment_Items_One.editTxtSearch;
+        System.out.println("The query is :" +searchKey);
+        //SELECT * FROM `item` WHERE `item` like '%1%' and `code` like '%1%'
+
+        String selectQuery = "SELECT * FROM " + ItemTable + " WHERE " + ItemName +" like " +"'%" + searchKey + "%'"
+                +" or " + ItemCodes + " like " +"'%" + searchKey + "%'" ;
+
+        System.out.println("The query is :" +selectQuery);
+
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String name =  cursor.getString(cursor.getColumnIndex(ItemName));
+                String code =  cursor.getString(cursor.getColumnIndex(ItemCodes));
+                String mrp  = cursor.getString(cursor.getColumnIndex(ItemRate));
+                String quty = cursor.getString(cursor.getColumnIndex(ItemQuantity));
+
+                System.out.println("The selected item is :" +name);
+                System.out.println("The selected item is :" +code);
+                System.out.println("The selected item is :" +mrp);
+
+
+                Item ItemList = new Item();
+                ItemList.setName(name);
+                ItemList.setItemcode(code);
+                ItemList.setMrb(mrp);
+                ItemList.setQty(quty);
+
+
+                itemList.add(ItemList);
+
+
+            } while (cursor.moveToNext());
+        }
+        // return contact list
+        return itemList;
+    }
+    //SELECT * FROM `item` WHERE `item` like '%1%' and `code` like '%1%'
+
+//    public ArrayList<NewItemList> getItemDetails() {
+//        ArrayList<NewItemList> wordList;
+//        wordList = new ArrayList<NewItemList>();
+//        String codes = Activity_Inward_Entry_Screen.code;
+//        String selectQuery = "SELECT * FROM " + ItemTable +" WHERE " + ItemCodes +" = '" +codes +"'";
+//        SQLiteDatabase database = this.getWritableDatabase();
+//        Cursor cursor = database.rawQuery(selectQuery, null);
+//        if (cursor.moveToFirst()) {
+//            do {
+//                String name =  cursor.getString(cursor.getColumnIndex(ItemName));
+//                String code =  cursor.getString(cursor.getColumnIndex(ItemCodes));
+//                String mrp  = cursor.getString(cursor.getColumnIndex(ItemRate));
+//
+//                System.out.println("The selected item is :" +name);
+//                System.out.println("The selected item is :" +code);
+//                System.out.println("The selected item is :" +mrp);
+//
+//
+//                NewItemList newItemList = new NewItemList();
+//                newItemList.setItemName(name);
+//                newItemList.setItemCode(code);
+//                newItemList.setRate(mrp);
+//
+//                wordList.add(newItemList);
+//
+//
+//            } while (cursor.moveToNext());
+//        }
+//        // return contact list
+//        return wordList;
+//    }
+
+ /*   public String getItemDetails(){
+        String codes = Activity_Inward_Entry_Screen.code;
+
+        String selectcode = "SELECT * FROM " + ItemTable +" WHERE " + ItemCodes +" = '" +codes +"'";
+
+        System.out.println("The selected item is :" +selectcode);
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectcode, null);
+
+        String name = "";
+
+        if (cursor.moveToNext()) {
+            name = cursor.getString(cursor.getColumnIndex(ItemName));
+            name = cursor.getString(cursor.getColumnIndex(ItemRate));
+            System.out.println("The selected item  :" +name);
+        }
+
+        database.close();
+        return str;
+
+    }
+*/
+    public int getItemCount() {
+        String countQuery = "SELECT  * FROM " + ItemTable;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+
+        System.out.println("The count db from dadabase:" +cnt);
+        cursor.close();
+        return cnt;
+    }
+
+
+
     public ArrayList<Godown> getVendor() {
         String selectqurey = "SELECT * FROM " + VendorTable;
         ArrayList<Godown> vendorInfo = new ArrayList<Godown>();
@@ -116,26 +316,13 @@ public class DBController extends SQLiteOpenHelper {
                 godown.setGcode(code);
                 godown.setPartyBillNo(billno);
                 godown.setPartyDate(date);
-
-                System.out.println("The gowdown :" +String.valueOf(godown));
-                System.out.println("The gowdown1 :" +godown);
-                System.out.println("The gowdown :" +godown.toString());
-
-                System.out.println("DBHelper: " + name);
-                System.out.println("DBHelper: " + code);
-                System.out.println("DBHelper " + billno);
-
                 vendorInfo.add(godown);
-                System.out.println("The gowdown :" +String.valueOf(vendorInfo));
-                System.out.println("The gowdown1 :" +vendorInfo);
-                System.out.println("The gowdown :" +vendorInfo.toString());
-
-
             }
         }
         database.close();
         return vendorInfo;
     }
+
     /* Method for fetching record from Database (For all items into cardview or grid view using pojo class)*/
     public ArrayList<Item> getAllEmployee() {
         String selectQuery = "SELECT  * FROM " + tablename;
