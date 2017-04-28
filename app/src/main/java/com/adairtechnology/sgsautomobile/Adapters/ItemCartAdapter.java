@@ -125,10 +125,7 @@ public class ItemCartAdapter extends RecyclerView
     public class DataObjectHolder extends RecyclerView.ViewHolder
             {
         TextView productname,productcode,productMRB;
-        ImageView product_detail,increment_value,decrement_value;
                 CheckBox chkIos;
-                EditText productdiscount;
-                String[] Current;
                 EditText quantity;
 
 
