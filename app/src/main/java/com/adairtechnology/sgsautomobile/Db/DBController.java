@@ -21,7 +21,7 @@ import java.util.HashMap;
  * Created by Android-Team1 on 2/4/2017.
  */
 
-public class DBController extends SQLiteOpenHelper {
+public class  DBController extends SQLiteOpenHelper {
 
     private static final String tablename = "items";  // table name
     private static final String name = "name";  // column name
@@ -37,6 +37,13 @@ public class DBController extends SQLiteOpenHelper {
     private static final String BillNo = "billNoofparty";
     private static final String Date = "dateofparty";
     private static final String GowdnCode ="vendorgodowncode";
+    private static final String ActItemName="actitemname";
+    private static final String ActItemCode="actitemcode";
+    private static final String ActItemRate = "actitemrate";
+    private static final String ActItemDiscount = "actitemdisc";
+    private static final String ActItemQuty="actitemquty";
+    private static final String ActItemTotal = "acttotalitem";
+
 
     //ALL ITEM DB
     private static final String ItemTable = "tableofitems";
@@ -64,11 +71,16 @@ public class DBController extends SQLiteOpenHelper {
                                                                 + itemcode + " text)";
 
         vendorQuery = "CREATE TABLE IF NOT EXISTS " + VendorTable + "(" + PartyName + " TEXT, "
-                        + BillNo + " TEXT, " + Date + " INTEGER ," + GowdnCode + " TEXT)";
+                        + BillNo + " TEXT, " + Date + " INTEGER ," + GowdnCode + " TEXT, "+
+                ActItemName + " TEXT, " + ActItemCode + " TEXT, " + ActItemQuty +" TEXT, " +
+                ActItemRate + " TEXT, " +ActItemDiscount +" TEXT )";
+
+
 
         itemQuery = "CREATE TABLE IF NOT EXISTS " + ItemTable + "(" + ItemCodes + " TEXT, "
                     + ItemName + " TEXT, " + ItemQuantity + " TEXT, " + ItemRate + " TEXT, "
                     + ItemDiscount + " TEXT, " + ItemTotalRate + " TEXT)";
+
         database.execSQL(query);
         database.execSQL(vendorQuery);
         database.execSQL(itemQuery);
@@ -310,12 +322,22 @@ public class DBController extends SQLiteOpenHelper {
                 String code = c.getString(c.getColumnIndex(GowdnCode));
                 String billno = c.getString(c.getColumnIndex(BillNo));
                 String date = c.getString(c.getColumnIndex(Date));
+                String itemname = c.getString(c.getColumnIndex(ActItemName));
+                String itemcode = c.getString(c.getColumnIndex(ActItemCode));
+                String itemquty = c.getString(c.getColumnIndex(ActItemQuty));
+                String itemrate = c.getString(c.getColumnIndex(ActItemRate));
+                String itemdisc = c.getString(c.getColumnIndex(ActItemDiscount));
 
                 Godown godown = new Godown();
                 godown.setPartyName(name);
                 godown.setGcode(code);
                 godown.setPartyBillNo(billno);
                 godown.setPartyDate(date);
+                godown.setItemName(itemname);
+                godown.setItemCode(itemcode);
+                godown.setItemQuty(itemquty);
+                godown.setItemDisc(itemdisc);
+                godown.setItemRate(itemrate);
                 vendorInfo.add(godown);
             }
         }

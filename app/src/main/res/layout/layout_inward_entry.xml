@@ -22,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_margin="5dp"
-            android:popupBackground="@color/logout"
             android:layout_weight="1"
             android:layout_height="35dp"/>
 
@@ -66,8 +65,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:scrollbars="horizontal"
-                    android:weightSum="4"
-                    android:visibility="gone">
+                    android:weightSum="4">
 
 
                     <TextView
@@ -233,11 +231,11 @@
 
                 <ListView
                     android:id="@+id/list_listView"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:foregroundGravity="center"
                     android:divider="@color/colorWhite"
                     android:dividerHeight="1dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
                 </ListView>
@@ -246,8 +244,8 @@
 
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:weightSum="1"
                 android:layout_weight="35"
                 android:layout_above="@+id/footer_rel_one">

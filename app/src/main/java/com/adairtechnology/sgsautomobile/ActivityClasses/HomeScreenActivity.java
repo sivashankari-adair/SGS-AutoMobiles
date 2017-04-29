@@ -107,7 +107,11 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
                     break;
 
                 case R.id.relative3:
-                    Toast.makeText(HomeScreenActivity.this,"Under Construction",Toast.LENGTH_SHORT).show();
+                    Intent intentSave=new Intent(HomeScreenActivity.this,Activity_Inward_Entry_Offline.class);
+                    intentSave.putExtra("Inward"," ");
+                    startActivity(intentSave);
+                    finish();
+
                     break;
 
                 case R.id.relative4:

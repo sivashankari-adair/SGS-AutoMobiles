@@ -22,10 +22,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,7 +43,6 @@ import com.adairtechnology.sgsautomobile.Fragments.Fragment_Items_One;
 import com.adairtechnology.sgsautomobile.Models.Godown;
 import com.adairtechnology.sgsautomobile.Models.Gowdndetail;
 import com.adairtechnology.sgsautomobile.Models.ListItem;
-import com.adairtechnology.sgsautomobile.Models.NewItemList;
 import com.adairtechnology.sgsautomobile.R;
 import com.adairtechnology.sgsautomobile.Utils.Utils;
 
@@ -67,12 +63,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
 /**
  * Created by Android-Team1 on 2/10/2017.
  */
 
-public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
+public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
         View.OnClickListener, TextWatcher {
 
     private static TextView party_name,bill_no,bill_date,godown_name, textTile;
@@ -93,12 +88,12 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     public int test2 = 0;
     int test;
     public static int outQutys;
-    public  ListView myList;
+    public ListView myList;
     SharedPreferences pref;
     String value,output1;
     ArrayList<HashMap<String, String>> output ;
     public static int RowCount;
-    public static   MyCustomAdapter adapter,adapter1;
+    public static MyCustomAdapter adapter,adapter1;
     public static TextView tex_rowCount, txt_total;
     FloatingActionButton floatingActionButton_add;
     ArrayList<String> finallist = new ArrayList<String>();
@@ -130,6 +125,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     ArrayList<String> godownName;
     ArrayList<Gowdndetail> godownNameLis;
     Boolean oAllow =false;
+    Context context;
 
 
     @Override
@@ -137,7 +133,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_inward_entry);
 
-        final Context context = this;
+         Context context =getApplicationContext();
 
         myList = (ListView) findViewById(R.id.list_listView);
         //tvTitle = (TextView) findViewById(R.id.tv_title1);
@@ -148,6 +144,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         image_allitems = (ImageView)findViewById(R.id.imgFragme);
         image_dialodVendor=(ImageView)findViewById(R.id.imgDialog);
         spinnGwdName = (Spinner)findViewById(R.id.spinner_godown_name);
+        // tvTitle.setText(" Inward Entry");
         edt_search = (EditText)findViewById(R.id.searchitem);
         party_name = (TextView)findViewById(R.id.txtpartyname);
         bill_no = (TextView)findViewById(R.id.txtbillnumber);
@@ -158,7 +155,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         linearLayout = (LinearLayout)findViewById(R.id.linerheader);
         linearLayout1 = (LinearLayout)findViewById(R.id.txtoflinear);
 
-        dialog = new Dialog(Activity_Inward_Entry_Screen.this);
+        dialog = new Dialog(context);
         dialog.setTitle("Vendor Information");
         dialog.setContentView(R.layout.layout_vendor_information);
         edt_nameVendor = (EditText)dialog.findViewById(R.id.pur_party_name);
@@ -200,15 +197,14 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
         Intent in = getIntent();
         parmeter = in.getStringExtra("Inward");
-
-        if(parmeter.equals(" ")){
+        if(!parmeter.equals("")){
 
             System.out.println("The seting is : " +parmeter);
-            textTile.setText(R.string.TilePurchase);
+            textTile.setText(R.string.TileInward);
         }
         else{
             System.out.println("The seting is : " +parmeter);
-            textTile.setText(R.string.TileInward);
+            textTile.setText(R.string.TilePurchase);
         }
 
         fragementValue = in.getStringExtra("Items_List");
@@ -236,8 +232,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                 codeEdt = edt_itemCodeNew.getText().toString();
 
+
                 if (!codeEdt.equals("") ) {
-                    values = controller.getItemDetails();
+                  //  values = controller.getItemDetails();
                     System.out.println("codeEdt: " + codeEdt);
 
                     if (values.size() == 0)
@@ -245,6 +242,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                         edt_nameNew.setText(" ");
                         edt_rateNew.setText(" ");
+
+
                     }
                     else
                     {
@@ -319,7 +318,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         switch(view.getId()) {
             case R.id.img:
 
-               backPressed();
+                backPressed();
 
                 break;
             case R.id.imgCaled:
@@ -328,7 +327,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                 month=mcurrentDate.get(Calendar.MONTH);
                 day=mcurrentDate.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Activity_Inward_Entry_Screen.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog mDatePicker=new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 
                         year  = selectedyear;
@@ -350,20 +349,16 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                 break;
             case R.id.imgFragme:
 
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    Fragment_Items_One fragment = new Fragment_Items_One();
-                    fragmentTransaction.add(android.R.id.content, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                Fragment_Items_One fragment = new Fragment_Items_One();
+                fragmentTransaction.add(android.R.id.content, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
 
                 break;
             case R.id.imgDialog:
 
                 dialog.show();
-
-                edt_nameVendor.setText("");
-                edt_billNo.setText("");
-                edt_date.setText("");
 
                 break;
             case R.id.save_btn_dialog:
@@ -418,25 +413,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                 pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                 value = pref.getString("ItemListFinalValue", "");
 
-                if(!Utils.isNetworkAvailable(Activity_Inward_Entry_Screen.this))
+                if(!Utils.isNetworkAvailable(context))
                 {
-                    //partyname + gname + gdate + pnobill
-
-                    DBController controller = new DBController(Activity_Inward_Entry_Screen.this);
-                    SQLiteDatabase db = controller.getWritableDatabase();
-                    ContentValues cvVendor = new ContentValues();
-
-                    cvVendor.put("nameofparty", partyname);
-                    cvVendor.put("billNoofparty",pnobill);
-                    cvVendor.put("Date", gdate);
-                    cvVendor.put("GowdnCode", gname);
-
-                    db.insert("tableofvendor", null, cvVendor);
-                    db.close();
-
-                    System.out.println("test_cv2" + cvVendor);
-
-                    Toast.makeText(Activity_Inward_Entry_Screen.this, "No Network Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
                     System.out.println("The string is : " +value +" Vendor info" + str_vendorInf);
                 }
                 else
@@ -450,7 +429,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
             case R.id.btn_report:
 
-                Intent intent = new Intent(Activity_Inward_Entry_Screen.this,ReportActivity.class);
+                Intent intent = new Intent(context,ReportActivity.class);
                 startActivity(intent);
 
                 break;
@@ -512,7 +491,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     listForSearchConcepts.add(0, item1);
 
                 }
-                adapter = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
+                adapter = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts);
                 myList.setAdapter(adapter);
 
                 adapter.notifyDataSetChanged();
@@ -539,7 +518,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     listForSearchConcepts1.add(0, item1);
 
                 }
-                adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts1);
+                adapter1 = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts1);
                 myList.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -554,13 +533,13 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     }
 
     private void addVendorInformation() {
-                if(!pname.equals("") && !pbill.equals("")  && !pdate.equals("")){
-                    dialog.dismiss();
+        if(!pname.equals("") && !pbill.equals("")  && !pdate.equals("")){
+            dialog.dismiss();
 
-                }
-                else {
-                    dialog.show();
-                }
+        }
+        else {
+            dialog.show();
+        }
     }
 
     /*public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -608,7 +587,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             item.setItemRate(purRate);
             item.setItemDisc(purDisc);
             listForSearchConcepts.add(0, item);
-            adapter = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
+            adapter = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts);
 
             for (int i = 0; i < listForSearchConcepts.size(); i++) {
 
@@ -621,7 +600,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         else
         {
 
-            Toast.makeText(Activity_Inward_Entry_Screen.this, R.string.dialogAdd_new, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.dialogAdd_new, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -641,7 +620,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             item.setItemRate(purRate);
             item.setItemDisc(purDisc);
             listForSearchConcepts1.add(0, item);
-            adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts1);
+            adapter1 = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts1);
 
             for (int i = 0; i < listForSearchConcepts1.size(); i++) {
                 myList.setAdapter(adapter1);
@@ -650,7 +629,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             }
         } else {
 
-            Toast.makeText(Activity_Inward_Entry_Screen.this, R.string.dialogAdd_new, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.dialogAdd_new, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -659,13 +638,13 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         int counts =listForSearchConcepts1.size();
         if( count==0 && counts==0 ){
 
-            Intent in = new Intent(Activity_Inward_Entry_Screen.this,HomeScreenActivity.class);
+            Intent in = new Intent(context,HomeScreenActivity.class);
             startActivity(in);
             finish();
         }
         else {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                    Activity_Inward_Entry_Screen.this);
+                    context);
 
             alertDialogBuilder
                     .setMessage("If go back data will be Lost")
@@ -675,7 +654,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                             listForSearchConcepts1.clear();
                             listForSearchConcepts.clear();
-                            Intent in = new Intent(Activity_Inward_Entry_Screen.this,HomeScreenActivity.class);
+                            Intent in = new Intent(context,HomeScreenActivity.class);
                             startActivity(in);
                             finish();
                         }
@@ -763,7 +742,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     }*/
 
 
-    class GowdnDetails extends AsyncTask<Void, Void, Void>{
+    class GowdnDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -799,7 +778,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void args) {
             spinnGwdName
-                    .setAdapter(new ArrayAdapter<String>(Activity_Inward_Entry_Screen.this,
+                    .setAdapter(new ArrayAdapter<String>(context,
                             android.R.layout.simple_spinner_dropdown_item,
                             godownName));
 
@@ -811,9 +790,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                                            View arg1, int position, long arg3) {
                     // TODO Auto-generated method stub
                     // Locate the textviews in activity_main.xml
-                   // godown_id = godnn.get(position).getGcode();
-                  //String  Godown_name = godownNameLis.get(position).getgName();
-                   // tvTitle.setText("   "+Godown_name);
+                    // godown_id = godnn.get(position).getGcode();
+                    //String  Godown_name = godownNameLis.get(position).getgName();
+                    // tvTitle.setText("   "+Godown_name);
                 }
 
                 @Override
@@ -821,7 +800,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     // TODO Auto-generated method stub
                 }
             });
-            Toast.makeText(Activity_Inward_Entry_Screen.this," Updated ",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context," Updated ",Toast.LENGTH_SHORT).show();
 
 
         }
@@ -892,7 +871,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                             System.out.println("The string id :" +itemname + itemqty);
 
-                            DBController controller = new DBController(Activity_Inward_Entry_Screen.this);
+                            DBController controller = new DBController(context);
                             SQLiteDatabase db = controller.getWritableDatabase();
                             ContentValues cv2 = new ContentValues();
 
@@ -925,7 +904,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(Void args) {
-            Toast.makeText(Activity_Inward_Entry_Screen.this," Updated ",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context," Updated ",Toast.LENGTH_SHORT).show();
 
 
         }

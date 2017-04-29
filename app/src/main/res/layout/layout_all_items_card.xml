@@ -39,10 +39,10 @@
 
                 <TextView
                     android:id="@+id/itemNameTV"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_weight="5.89"
+                    android:layout_weight="10.75"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:maxLength="20"
@@ -51,7 +51,7 @@
 
                 <TextView
                     android:id="@+id/itemCodeTV"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:textStyle="bold"

@@ -186,7 +186,7 @@
                     android:id="@+id/text3"
                     style="@style/ImageTitle"
                     android:layout_alignParentBottom="true"
-                    android:text="File"
+                    android:text="Save Later"
                     android:textSize="12sp" />
             </RelativeLayout>
 

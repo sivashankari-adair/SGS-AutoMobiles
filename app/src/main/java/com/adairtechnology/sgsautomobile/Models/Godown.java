@@ -10,6 +10,11 @@ public class Godown {
     private String partyName;
     private String partyBillNo;
     private String partyDate;
+    private String itemName;
+    private String itemCode;
+    private String itemRate;
+    private String itemDisc;
+    private String itemQuty;
 
 
     public String getGcode() {
@@ -42,5 +47,45 @@ public class Godown {
 
     public void setPartyDate(String partyDate) {
         this.partyDate = partyDate;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public String getItemRate() {
+        return itemRate;
+    }
+
+    public void setItemRate(String itemRate) {
+        this.itemRate = itemRate;
+    }
+
+    public String getItemDisc() {
+        return itemDisc;
+    }
+
+    public void setItemDisc(String itemDisc) {
+        this.itemDisc = itemDisc;
+    }
+
+    public String getItemQuty() {
+        return itemQuty;
+    }
+
+    public void setItemQuty(String itemQuty) {
+        this.itemQuty = itemQuty;
     }
 }
