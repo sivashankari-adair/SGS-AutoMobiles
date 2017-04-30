@@ -10,6 +10,7 @@ public class ListItem {
     public String iteQuty;
     public String itemRate;
     public String itemDisc;
+    public String itemStaus;
 
     public String getItemName() {
         return itemName;
@@ -49,6 +50,14 @@ public class ListItem {
 
     public void setItemDisc(String itemDisc) {
         this.itemDisc = itemDisc;
+    }
+
+    public String getItemStaus() {
+        return itemStaus;
+    }
+
+    public void setItemStaus(String itemStaus) {
+        this.itemStaus = itemStaus;
     }
 
 

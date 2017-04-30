@@ -23,7 +23,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_margin="0dp"
         android:padding="0.173dp">
 
         <EditText
@@ -42,7 +42,7 @@
      <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
+                android:layout_margin="0dp"
                 android:padding="0.173dp">
 
                 <EditText
@@ -61,7 +61,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
+                android:layout_margin="0dp"
                 android:padding="0.173dp">
 
                 <EditText
@@ -80,7 +80,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_margin="0dp"
         android:padding="0.173dp">
 
         <EditText
@@ -100,7 +100,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_margin="0dp"
         android:padding="0.173dp">
 
         <EditText
@@ -115,6 +115,12 @@
             android:hint="@string/purDialog_disc">
         </EditText>
     </android.support.design.widget.TextInputLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dialogstatus"
+                android:visibility="gone"/>
 
     <Button
         android:id="@+id/save_btn_dialogPur"

@@ -68,6 +68,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+
+
 /**
  * Created by Android-Team1 on 2/10/2017.
  */
@@ -76,8 +78,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         View.OnClickListener, TextWatcher {
 
     private static TextView party_name,bill_no,bill_date,godown_name, textTile;
-    private EditText edt_search,edt_nameVendor,edt_billNo,edt_date,edt_godownName,edt_discountNew,edt_rateNew,edt_qutyNew,edt_itemCodeNew,edt_nameNew;
-    String purchaseItemName, purchQuty, purRate, purDisc, str_addNew, arrayAddNew, arrayVendorInf, str_reportName, str_reportBillno, str_reportDate;
+    private EditText edt_search,edt_nameVendor,edt_billNo,edt_date,edt_discountNew,edt_rateNew,edt_qutyNew,edt_itemCodeNew,edt_nameNew;
+    String purchaseItemName, purchQuty, purRate, purDisc,purstatus;
     Button btn_save,btn_saveAddNew,btn_update,btn_report;
     public static String pname,pbill,pdate,pgodown,searchItem;
     String fragementValue,text;
@@ -125,11 +127,12 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     TextView  textdis,textrate;
     LinearLayout linearLayout,linearLayout1;
     ArrayList<HashMap<String, String>> values;
-    String name,code,rate, gName;
+    String nameDB,codeDB,rateDB, gNameDB;
     Spinner spinnGwdName;
     ArrayList<String> godownName;
     ArrayList<Gowdndetail> godownNameLis;
     Boolean oAllow =false;
+    EditText txtStatus;
 
 
     @Override
@@ -140,7 +143,6 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         final Context context = this;
 
         myList = (ListView) findViewById(R.id.list_listView);
-        //tvTitle = (TextView) findViewById(R.id.tv_title1);
         image_back = (ImageView)findViewById(R.id.img);
         image_back.setImageDrawable(getResources().getDrawable(R.drawable.arrow_left));
         linear_purchase = (LinearLayout) findViewById(R.id.linear_purchase);
@@ -173,8 +175,11 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         edt_qutyNew = (EditText) findViewById(R.id.pur_dialog_quty);
         edt_rateNew = (EditText) findViewById(R.id.pur_dialog_rate);
         edt_discountNew = (EditText) findViewById(R.id.purcDialog_discs);
+        txtStatus = (EditText)findViewById(R.id.dialogstatus);
+
         floatingActionButton_add = (FloatingActionButton) findViewById(R.id.fabAdd);
         btn_saveAddNew = (Button) findViewById(R.id.save_btn_dialogPur);
+
         btn_update = (Button)findViewById(R.id.update);
         btn_report =(Button) findViewById(R.id.btn_report);
 
@@ -205,6 +210,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
             System.out.println("The seting is : " +parmeter);
             textTile.setText(R.string.TilePurchase);
+
         }
         else{
             System.out.println("The seting is : " +parmeter);
@@ -242,41 +248,30 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                     if (values.size() == 0)
                     {
-
-                        edt_nameNew.setText(" ");
-                        edt_rateNew.setText(" ");
+                        edt_nameNew.setText("");
+                        edt_rateNew.setText("");
+                        txtStatus.setText("0");
+                        System.out.println("The status if : " + txtStatus.getText());
                     }
                     else
                     {
-                        name = values.get(0).get("nameofitem");
-                        code = values.get(0).get("codeoditem");
-                        rate = values.get(0).get("rateofitem");
-                        System.out.println("code: " + code);
-//                        edt_itemCodeNew.setText(code);
-                        edt_nameNew.setText(name);
-                        edt_rateNew.setText(rate);
-
-
-                       /* code = edt_itemCodeNew.getText().toString();*/
-
-
+                        nameDB = values.get(0).get("nameofitem");
+                        codeDB= values.get(0).get("codeoditem");
+                        rateDB = values.get(0).get("rateofitem");
+                        System.out.println("code: " + codeDB);
+                        edt_nameNew.setText(nameDB);
+                        edt_rateNew.setText(rateDB);
+                        txtStatus.setText("1");
+                        System.out.println("The status else : " + txtStatus.getText());
                     }
                 }
                 else {
                     edt_nameNew.setText("");
                     edt_rateNew.setText("");
-
-                    // name = edt_nameNew.getText().toString();
-                    System.out.println("the arraylist is111 : " + name);
-
-
-
-
+                    System.out.println("the arraylist is111 : " + nameDB);
                 }
             }
         });
-        //changeListener();
-
 
     }
 
@@ -426,10 +421,15 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     SQLiteDatabase db = controller.getWritableDatabase();
                     ContentValues cvVendor = new ContentValues();
 
-                    cvVendor.put("nameofparty", partyname);
-                    cvVendor.put("billNoofparty",pnobill);
-                    cvVendor.put("Date", gdate);
-                    cvVendor.put("GowdnCode", gname);
+                    cvVendor.put("nameofparty", pname);
+                    cvVendor.put("billNoofparty",pbill);
+                    cvVendor.put("dateofparty", pdate);
+                    cvVendor.put("vendorgodowncode", gname);
+                    /*cvVendor.put("actitemname",name);
+                    cvVendor.put("actitemcode",code);
+                    cvVendor.put("actitemrate",rate);
+                    cvVendor.put("actitemdisc",dist);
+                    cvVendor.put("actitemquty",quentity);*/
 
                     db.insert("tableofvendor", null, cvVendor);
                     db.close();
@@ -459,7 +459,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     }
 
     private void searchtext() {
-
+            edt_search.setCursorVisible(true);
         if(!edt_search.equals("")) {
 
             edt_search.addTextChangedListener(this);
@@ -598,6 +598,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         purchQuty = edt_qutyNew.getText().toString();
         purRate = edt_rateNew.getText().toString();
         purDisc = edt_discountNew.getText().toString();
+        purstatus = txtStatus.getText().toString();
+        System.out.println("The Status is :" +purstatus);
 
         if (!purchaseItemName.equals("") && !purchaseCode.equals("") && !purchQuty.equals("") && !purRate.equals("")) {
 
@@ -607,6 +609,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             item.setIteQuty(purchQuty);
             item.setItemRate(purRate);
             item.setItemDisc(purDisc);
+            item.setItemStaus(purstatus);
             listForSearchConcepts.add(0, item);
             adapter = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
 
@@ -631,6 +634,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         purchQuty = edt_qutyNew.getText().toString();
         purRate = edt_rateNew.getText().toString();
         purDisc = edt_discountNew.getText().toString();
+        purstatus = txtStatus.getText().toString();
+        System.out.println("The Status is :" +purstatus);
+
 
         if (!purchaseItemName.equals("") && !purchaseCode.equals("") && !purchQuty.equals("") && !purRate.equals("")) {
 
@@ -640,6 +646,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             item.setIteQuty(purchQuty);
             item.setItemRate(purRate);
             item.setItemDisc(purDisc);
+            item.setItemStaus(purstatus);
             listForSearchConcepts1.add(0, item);
             adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts1);
 
@@ -781,9 +788,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     gdn.setgName(cc.getString("Godown"));
 
                     gcodee = cc.optString("Code");
-                    gName = cc.getString("Godown");
+                    gNameDB = cc.getString("Godown");
 
-                    System.out.println("godown name :" +gName);
+                    System.out.println("godown name :" +gNameDB);
 
                     godownNameLis.add(gdn);
 

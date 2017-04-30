@@ -69,6 +69,7 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:maxLines="1"
+            android:visibility="gone"
             android:background="@color/blue_100"
             android:textColor="@color/black"
             android:textSize="13sp" />
@@ -83,6 +84,7 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:maxLines="1"
+            android:visibility="gone"
             android:background="@color/blue_200"
             android:textColor="@color/black"
             android:textSize="13sp" />
@@ -93,6 +95,11 @@
             android:id="@+id/delete"
             android:layout_weight="0.4"
             android:src="@drawable/deletered" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/staus"
+            />
 
     </LinearLayout>
     </LinearLayout>
