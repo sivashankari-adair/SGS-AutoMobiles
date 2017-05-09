@@ -56,7 +56,7 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_recycler_for_report);
         list = (ListView)findViewById(R.id.report_list_listView);
-        print = (FloatingActionButton) findViewById(R.id.print_button);
+//        print = (FloatingActionButton) findViewById(R.id.print_button);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvTitle = (TextView) findViewById(R.id.tv_title1);
         progres = (ProgressBar)findViewById(R.id.itemProgressBarReport);
@@ -80,11 +80,11 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
-        print.setOnClickListener(new View.OnClickListener() {
+       /* print.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             }
-        });
+        });*/
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -21,7 +21,7 @@
     <string name="hint_reportDialog_number">Bill Number</string>
     <string name="report_date">Date</string>
     <string name="btn_reportOk">Ok</string>
-    <string name="dialogAdd_new">Please Fill All Item</string>
+    <string name="dialogAdd_new">Please Fill All Item Details</string>
     <string name="hint_party_code">Godown Code</string>
     <string name="TileInward">Inward Entry</string>
     <string name="TilePurchase">Purchase Entry</string>

@@ -27,7 +27,7 @@ import static com.adairtechnology.sgsautomobile.ActivityClasses.Activity_Inward_
  * Created by AndroidTeam2 on 2/13/2017.
  */
 
-public class MyCustomAdapter extends ArrayAdapter<ListItem> {
+public class InwardEntryAdapter extends ArrayAdapter<ListItem> {
     private LayoutInflater mLayoutInflater;
     private ArrayList<ListItem> arraylist;
     List<ListItem> itemList;//arrayList.addAll(itemlist)
@@ -42,7 +42,7 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-    public MyCustomAdapter(Context context, int simple_list_item_1, List<ListItem> itemList){
+    public InwardEntryAdapter(Context context, int simple_list_item_1, List<ListItem> itemList){
 
         super(context ,0,itemList);
         this.itemList = itemList;
@@ -55,7 +55,7 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
     public int getCount() {
         rowBeforeDel = itemList.size();
         System.out.println(" list size is" + rowBeforeDel);
-        tex_rowCount.setText("TotalCount :" +rowBeforeDel);
+        tex_rowCount.setText("Total Count :" +rowBeforeDel);
         return itemList.size();
     }
 
@@ -125,7 +125,7 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
               int id = Quantity.get(j);
               test2 = test2 + id;
               System.out.println("The total quantity of array tetst: " + test2);
-              txt_total.setText("helo"+test2+"");
+              txt_total.setText("Total Quantity:"+test2+"");
           }
 
 
@@ -153,7 +153,7 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
                                   itemList.remove(position);
                                   notifyDataSetChanged();
 
-                                  txt_total.setText("hiii");
+                                  txt_total.setText("Total Quantity:");
 
                               }
                           })
@@ -236,7 +236,7 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
               int id = Quantity.get(j);
               test2 = test2 + id;
               System.out.println("The total quantity of array tetst: " + test2);
-              txt_total.setText("helo"+test2+"");
+              txt_total.setText("Total Quantity:"+test2+"");
           }
 
 
@@ -264,7 +264,7 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
                                   itemList.remove(position);
                                   notifyDataSetChanged();
 
-                                  txt_total.setText("hiii");
+                                  txt_total.setText("Total Quantity:");
 
                               }
                           })
@@ -319,13 +319,42 @@ public class MyCustomAdapter extends ArrayAdapter<ListItem> {
                         || postDetail.getItemName().toLowerCase(Locale.getDefault()).contains(charText)
                         || postDetail.getIteQuty().toLowerCase(Locale.getDefault()).contains(charText)
                         || postDetail.getItemRate().toLowerCase(Locale.getDefault()).contains(charText)
-                        || postDetail.getItemDisc().toLowerCase(Locale.getDefault()).contains(charText)) {
+                        || postDetail.getItemDisc().toLowerCase(Locale.getDefault()).contains(charText))
+                {
                     itemList.add(postDetail);
                 }
             }
         }
         notifyDataSetChanged();
     }
+
+    public void filter2(String charText) {
+
+        charText = charText.toLowerCase(Locale.getDefault());
+
+        itemList.clear();
+        if (charText.length() == 0) {
+            itemList.addAll(arraylist);
+
+
+        }
+        else
+        {
+            for (ListItem postDetail : arraylist) {
+
+                if (charText.length() != 0 && postDetail.getItemCode().toLowerCase(Locale.getDefault()).contains(charText)
+                        || postDetail.getItemName().toLowerCase(Locale.getDefault()).contains(charText)
+                        || postDetail.getIteQuty().toLowerCase(Locale.getDefault()).contains(charText)
+                        || postDetail.getItemRate().toLowerCase(Locale.getDefault()).contains(charText)
+                        || postDetail.getItemDisc().toLowerCase(Locale.getDefault()).contains(charText))
+                {
+                    itemList.add(postDetail);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 
 
 }

@@ -33,23 +33,16 @@ public class ItemCartAdapter extends RecyclerView
         .Adapter<ItemCartAdapter
         .DataObjectHolder> implements ListAdapter {
     private Context mContext;
-    private static String LOG_TAG = "ItemCartAdapter";
+
     ArrayList<Item> mDataset;
-    List<Item> mDatasets;
-    private ArrayList<Item> itemNameArrayList = new ArrayList<>();
+
     LayoutInflater inflater;
-    private static int added_value;
-    DBController controller = new DBController(mContext);
- //   public static String all_details;
-    public String pro_name,pro_code,pro_qty;
-    private List<Item> filteredData;
+
     List<Item> mOriginalData;
 
-    private List<Item> mValues;
-    List<Item> itemlistttt;
     private ArrayList<String> cartItem = new ArrayList<String>();
-    String[] Current;
-    StringBuilder sb;
+
+    boolean[] itemChecked;
 
     public ItemCartAdapter(Context mContext, List<Item> itemNameArrayList) {
 
@@ -59,6 +52,7 @@ public class ItemCartAdapter extends RecyclerView
         inflater = LayoutInflater.from(mContext);
         this.mDataset = new ArrayList<Item>();
         this.mDataset.addAll(itemNameArrayList);
+        itemChecked = new boolean[itemNameArrayList.size()];
 
 
     }
@@ -167,12 +161,20 @@ public class ItemCartAdapter extends RecyclerView
                                                         }
                                                     });
 
+        holder.chkIos.setChecked(false);
+
+        if (itemChecked[position])
+            holder.chkIos.setChecked(true);
+        else
+            holder.chkIos.setChecked(false);
+
 
         holder.chkIos.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 if (((CheckBox) view).isChecked()) {
+                    itemChecked[position] = true;
 
                     String pro_code = holder.productcode.getText().toString();
                     String pro_name = holder.productname.getText().toString();
@@ -186,6 +188,7 @@ public class ItemCartAdapter extends RecyclerView
                     System.out.println("Cart Item Added" + cartItem);
                 }
                 else{
+                    itemChecked[position] = false;
 
                     String pro_code = holder.productcode.getText().toString();
                     String pro_name = holder.productname.getText().toString();
@@ -210,9 +213,6 @@ public class ItemCartAdapter extends RecyclerView
 
     }
 
-    private void clicklicener() {
-
-    }
 
 
 

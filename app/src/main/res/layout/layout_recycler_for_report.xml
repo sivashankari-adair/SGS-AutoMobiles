@@ -79,7 +79,7 @@
                         android:layout_margin="5dp"
                         android:id="@+id/Discount"
                         android:gravity="left"
-                        android:text="Disc"/>
+                        android:text="Dis"/>
 
                 </LinearLayout>
 
@@ -107,6 +107,7 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="1.5"
                         android:inputType="number"
+                        android:maxLength="10"
                         android:hint="Bill Number"
                         android:background="@drawable/background"/>
                     <Button
@@ -119,6 +120,7 @@
                 </LinearLayout>
 
                 </LinearLayout>
+<!--
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/print_button"
                     android:layout_width="wrap_content"
@@ -128,6 +130,7 @@
                     android:src="@drawable/check"
                     app:backgroundTint="@color/colorGreen"
                     app:borderWidth="0dp" />
+-->
                 <ProgressBar
                     android:id="@+id/itemProgressBarReport"
                     style="@android:style/Widget.ProgressBar"

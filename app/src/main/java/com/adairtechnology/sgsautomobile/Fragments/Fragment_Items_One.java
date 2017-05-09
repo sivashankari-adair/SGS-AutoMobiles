@@ -128,7 +128,7 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
 
         if(dbCount == 0){
             if(!Utils.isNetworkAvailable(mContext)){
-                Toast.makeText(mContext, "No Network Connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Network Is Not Avialable", Toast.LENGTH_SHORT).show();
             }
             else {
 
@@ -145,7 +145,6 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
         }
         else{
 
-//            itemProgressBar.setVisibility(View.VISIBLE);
             itemNameArrayList = controller.getItems();
             itemshopAdapter = new ItemCartAdapter(mContext, itemNameArrayList);
             itemProgressBar = (ProgressBar) rootView.findViewById(R.id.itemProgressBar);
@@ -180,7 +179,7 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
         searchs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Search Click", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(mContext, "Search Click", Toast.LENGTH_SHORT).show();
                 cross.setVisibility(View.VISIBLE);
                 edtsearch.setVisibility(View.VISIBLE);
                 searchListener();
@@ -192,7 +191,7 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
         cross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Cross click", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(mContext, "Cross click", Toast.LENGTH_SHORT).show();
                 searchs.setVisibility(View.VISIBLE);
                 cross.setVisibility(View.GONE);
                 edtsearch.setVisibility(View.GONE);
@@ -208,7 +207,7 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
                 String shippingorder = prefs.getString("Orderinfo", "");
 
 
-                Toast.makeText(mContext, "Fragment fab is clicked", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(mContext, "Fragment fab is clicked", Toast.LENGTH_SHORT).show();
                 Intent in  = new Intent(getActivity(), Activity_Inward_Entry_Screen.class);
                 in.putExtra("Items_List",shippingorder);
                 in.putExtra("Inward",Activity_Inward_Entry_Screen.parmeter);
@@ -258,7 +257,8 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
         });
     }
 
-    private void onBackPressed() {
+    public void onBackPressed() {
+        // super.onBackPressed();
         FragmentManager fm = getActivity().getSupportFragmentManager();
         fm.popBackStack();
     }
@@ -291,16 +291,13 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
             String jsonStrr = httpHandler.makeServiceCall(Url);
 
             Log.e("Test url2", jsonStrr);
-            //Log.e("Response from url:", jsonStrr);
 
             if (jsonStrr != null) {
                 try {
                     JSONObject jsonObjj = new JSONObject(jsonStrr);
 
-                    // Getting JSON Array node
                     JSONArray itemss = jsonObjj.getJSONArray("items");
 
-                    // looping through All Contacts
                     for (int i = 0; i < itemss.length(); i++) {
 
                         JSONObject c = itemss.getJSONObject(i);
@@ -356,43 +353,12 @@ public class  Fragment_Items_One  extends Fragment implements Serializable{
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-//            itemProgressBar.setVisibility(View.GONE);
 
             itemshopAdapter = new ItemCartAdapter(mContext, (ArrayList<Item>)listForSearchConcepts);
             shopRcyclerView.setAdapter(itemshopAdapter);
-
-            //search();
-
-
         }
     }
 
-    private void search() {
-
-        edtsearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /*text = charSequence.toString().toLowerCase(Locale.getDefault());
-                System.out.println("The string value " +text);
-                itemadpter.filter(text);*/
-                System.out.println("the character :" +charSequence.toString());
-                itemshopAdapter.filter(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-
-
-    }
 
     public interface ClickListener {
         void onClick(View view, int position);

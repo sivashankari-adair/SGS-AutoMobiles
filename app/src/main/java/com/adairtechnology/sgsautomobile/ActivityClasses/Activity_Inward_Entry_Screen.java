@@ -22,10 +22,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,13 +37,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.adairtechnology.sgsautomobile.Adapters.MyCustomAdapter;
+import com.adairtechnology.sgsautomobile.Adapters.InwardEntryAdapter;
 import com.adairtechnology.sgsautomobile.Db.DBController;
 import com.adairtechnology.sgsautomobile.Fragments.Fragment_Items_One;
 import com.adairtechnology.sgsautomobile.Models.Godown;
 import com.adairtechnology.sgsautomobile.Models.Gowdndetail;
 import com.adairtechnology.sgsautomobile.Models.ListItem;
-import com.adairtechnology.sgsautomobile.Models.NewItemList;
 import com.adairtechnology.sgsautomobile.R;
 import com.adairtechnology.sgsautomobile.Utils.Utils;
 
@@ -62,6 +58,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -75,7 +72,7 @@ import java.util.Locale;
  */
 
 public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
-        View.OnClickListener, TextWatcher {
+        View.OnClickListener{
 
     private static TextView party_name,bill_no,bill_date,godown_name, textTile;
     private EditText edt_search,edt_nameVendor,edt_billNo,edt_date,edt_discountNew,edt_rateNew,edt_qutyNew,edt_itemCodeNew,edt_nameNew;
@@ -87,7 +84,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     private Toolbar toolbar;
     public static TextView tvTitle;
     ImageView image_back,image_allitems,image_dialodVendor;
-    Dialog dialog;
+    Dialog dialog,dialogs;
     String val_frag;
     private ListItem item,item1;
     private static List<ListItem> listForSearchConcepts = new ArrayList<ListItem>();
@@ -100,7 +97,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     String value,output1;
     ArrayList<HashMap<String, String>> output ;
     public static int RowCount;
-    public static   MyCustomAdapter adapter,adapter1;
+    public static InwardEntryAdapter adapter,adapter1;
     public static TextView tex_rowCount, txt_total;
     FloatingActionButton floatingActionButton_add;
     ArrayList<String> finallist = new ArrayList<String>();
@@ -110,7 +107,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
     RelativeLayout relative_list;
     String res,server_response,names,gowdon,bill,date;
     String customvalue;
-    ImageView imag_calendr;
+    ImageView imag_calendr,cancelItem;
     static final int DATE_PICKER_ID = 1111;
     private int year,index;
     private int month;
@@ -142,6 +139,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
         final Context context = this;
 
+
         myList = (ListView) findViewById(R.id.list_listView);
         image_back = (ImageView)findViewById(R.id.img);
         image_back.setImageDrawable(getResources().getDrawable(R.drawable.arrow_left));
@@ -169,16 +167,20 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         imag_calendr = (ImageView)dialog.findViewById(R.id.imgCaled);
         btn_save = (Button) dialog.findViewById(R.id.save_btn_dialog);
         txt_total = (TextView) findViewById(R.id.txt_quty);
+//         cancelItem = (ImageView) findViewById(R.id.cancel);
 
-        edt_nameNew = (EditText) findViewById(R.id.pur_dialog_itemName);
-        edt_itemCodeNew = (EditText) findViewById(R.id.pur_dialog_itemCode);
-        edt_qutyNew = (EditText) findViewById(R.id.pur_dialog_quty);
-        edt_rateNew = (EditText) findViewById(R.id.pur_dialog_rate);
-        edt_discountNew = (EditText) findViewById(R.id.purcDialog_discs);
-        txtStatus = (EditText)findViewById(R.id.dialogstatus);
+        dialogs = new Dialog(Activity_Inward_Entry_Screen.this);
+        dialogs.setTitle("New Item");
+        dialogs.setContentView(R.layout.prchase_entity_dialogbx);
+        edt_nameNew = (EditText) dialogs.findViewById(R.id.pur_dialog_itemName);
+        edt_itemCodeNew = (EditText) dialogs.findViewById(R.id.pur_dialog_itemCode);
+        edt_qutyNew = (EditText) dialogs.findViewById(R.id.pur_dialog_quty);
+        edt_rateNew = (EditText) dialogs.findViewById(R.id.pur_dialog_rate);
+        edt_discountNew = (EditText) dialogs.findViewById(R.id.purcDialog_discs);
+        txtStatus = (EditText)dialogs.findViewById(R.id.dialogstatus);
 
         floatingActionButton_add = (FloatingActionButton) findViewById(R.id.fabAdd);
-        btn_saveAddNew = (Button) findViewById(R.id.save_btn_dialogPur);
+        btn_saveAddNew = (Button) dialogs.findViewById(R.id.save_btn_dialogPur);
 
         btn_update = (Button)findViewById(R.id.update);
         btn_report =(Button) findViewById(R.id.btn_report);
@@ -222,9 +224,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         test(val_frag);
 
         checklistener();
-
-        searchtext();
         clicklistener();
+        searchtext();
 
         edt_itemCodeNew.addTextChangedListener(new TextWatcher() {
             @Override
@@ -265,7 +266,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                         System.out.println("The status else : " + txtStatus.getText());
                     }
                 }
-                else {
+                else
+                {
                     edt_nameNew.setText("");
                     edt_rateNew.setText("");
                     System.out.println("the arraylist is111 : " + nameDB);
@@ -304,6 +306,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         btn_saveAddNew.setOnClickListener(this);
         btn_update.setOnClickListener(this);
         btn_report.setOnClickListener(this);
+       // cancelItem.setOnClickListener(this);
 
 
     }
@@ -314,7 +317,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         switch(view.getId()) {
             case R.id.img:
 
-               backPressed();
+              onBackPressed();
 
                 break;
             case R.id.imgCaled:
@@ -382,17 +385,14 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                 break;
             case R.id.fabAdd:
-
-                linear_purchase.setVisibility(View.VISIBLE);
-                relative_list.setVisibility(View.GONE);
+                dialogs.show();
 
                 break;
+
+
             case R.id.save_btn_dialogPur:
 
-                linear_purchase.setVisibility(View.GONE);
-                relative_list.setVisibility(View.VISIBLE);
-
-                if(parmeter.equals(" "))
+              if(parmeter.equals(" "))
                 {
                     Test();
                 }else
@@ -400,11 +400,6 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     Test1();
                 }
 
-                edt_nameNew.setText("");
-                edt_itemCodeNew.setText("");
-                edt_qutyNew.setText("");
-                edt_rateNew.setText("");
-                edt_discountNew.setText("");
 
                 break;
 
@@ -412,6 +407,15 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                 pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                 value = pref.getString("ItemListFinalValue", "");
+                value = value.replaceAll("\\[", "").replaceAll("\\]","");
+                String[] array = value.split(";");
+                ArrayList<String> dfd = new ArrayList<>(Arrays.asList(array));
+
+                System.out.println("The split array is : " + array.toString());
+                System.out.println("The split array is : " + dfd.toString());
+
+                
+
 
                 if(!Utils.isNetworkAvailable(Activity_Inward_Entry_Screen.this))
                 {
@@ -425,7 +429,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     cvVendor.put("billNoofparty",pbill);
                     cvVendor.put("dateofparty", pdate);
                     cvVendor.put("vendorgodowncode", gname);
-                    /*cvVendor.put("actitemname",name);
+                  /*  cvVendor.put("actitemname",name);
                     cvVendor.put("actitemcode",code);
                     cvVendor.put("actitemrate",rate);
                     cvVendor.put("actitemdisc",dist);
@@ -436,16 +440,14 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
                     System.out.println("test_cv2" + cvVendor);
 
-                    Toast.makeText(Activity_Inward_Entry_Screen.this, "No Network Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Inward_Entry_Screen.this, "Network Is Not Avialable", Toast.LENGTH_SHORT).show();
                     System.out.println("The string is : " +value +" Vendor info" + str_vendorInf);
                 }
                 else
                 {
                     new addNewTask().execute();
-                    listForSearchConcepts.clear();
-                    listForSearchConcepts1.clear();
-                }
 
+                }
                 break;
 
             case R.id.btn_report:
@@ -454,44 +456,41 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                 startActivity(intent);
 
                 break;
+
         }
 
     }
+
 
     private void searchtext() {
-            edt_search.setCursorVisible(true);
-        if(!edt_search.equals("")) {
+            //edt_search.setCursorVisible(true);
 
-            edt_search.addTextChangedListener(this);
-        }
-        else {
-            System.out.println(" The EditText Not TextChange ");
+        edt_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        }
-    }
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-    }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // TODO Auto-generated method stub
+                text = edt_search.getText().toString().toLowerCase(Locale.getDefault());
+                System.out.println("The string value " + text);
 
-        text = edt_search.getText().toString().toLowerCase(Locale.getDefault());
-        System.out.println("The string value " +text);
-        if(!text.equals("")) {
-            adapter.filter(text);
-        }
-        else {
-            System.out.println("Empty Search");
+                adapter.filter(text);
+            }
 
-        }
-    }
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-    @Override
-    public void afterTextChanged(Editable editable) {
+            }
+        });
+
+
 
     }
+
 
     private void test(String val_frag) {
         if(parmeter.equals(" ")) {
@@ -512,7 +511,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     listForSearchConcepts.add(0, item1);
 
                 }
-                adapter = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
+                adapter = new InwardEntryAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
                 myList.setAdapter(adapter);
 
                 adapter.notifyDataSetChanged();
@@ -539,7 +538,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     listForSearchConcepts1.add(0, item1);
 
                 }
-                adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts1);
+                adapter1 = new InwardEntryAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts1);
                 myList.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -553,6 +552,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
 
     }
 
+
     private void addVendorInformation() {
                 if(!pname.equals("") && !pbill.equals("")  && !pdate.equals("")){
                     dialog.dismiss();
@@ -560,18 +560,10 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                 }
                 else {
                     dialog.show();
+                    Toast.makeText(this, "Please Fill All", Toast.LENGTH_SHORT).show();
                 }
     }
 
-    /*public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
-        Toast toast = Toast.makeText(getApplicationContext(),
-                "Item " + (position + 1) + ": " + rowItems.get(position),
-                Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.show();
-    }
-*/
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -590,8 +582,9 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                 break;
         }
     }
-    private void Test()
-    {
+
+
+    private void Test() {
         System.out.println("The Activity Param1:" +parmeter);
         purchaseItemName = edt_nameNew.getText().toString();
         purchaseCode = edt_itemCodeNew.getText().toString();
@@ -601,7 +594,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         purstatus = txtStatus.getText().toString();
         System.out.println("The Status is :" +purstatus);
 
-        if (!purchaseItemName.equals("") && !purchaseCode.equals("") && !purchQuty.equals("") && !purRate.equals("")) {
+        if (!purchaseItemName.equals("") && !purchaseCode.equals("") && !purchQuty.equals("") && !purRate.equals("") &&!purDisc.equals("")) {
 
             item = new ListItem();
             item.setItemName(purchaseItemName);
@@ -611,7 +604,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             item.setItemDisc(purDisc);
             item.setItemStaus(purstatus);
             listForSearchConcepts.add(0, item);
-            adapter = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
+            adapter = new InwardEntryAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts);
 
             for (int i = 0; i < listForSearchConcepts.size(); i++) {
 
@@ -620,15 +613,28 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                 myList.setScrollingCacheEnabled(true);
                 adapter.notifyDataSetChanged();
             }
+            dialogs.dismiss();
+            edt_nameNew.setText("");
+            edt_itemCodeNew.setText("");
+            edt_qutyNew.setText("");
+            edt_rateNew.setText("");
+            edt_discountNew.setText("");
+
         }
         else
         {
 
             Toast.makeText(Activity_Inward_Entry_Screen.this, R.string.dialogAdd_new, Toast.LENGTH_SHORT).show();
+            dialogs.show();
         }
+
+
     }
 
+
     private  void  Test1() {
+        System.out.println("The Activity Param2:" +parmeter);
+
         purchaseItemName = edt_nameNew.getText().toString();
         purchaseCode = edt_itemCodeNew.getText().toString();
         purchQuty = edt_qutyNew.getText().toString();
@@ -638,7 +644,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         System.out.println("The Status is :" +purstatus);
 
 
-        if (!purchaseItemName.equals("") && !purchaseCode.equals("") && !purchQuty.equals("") && !purRate.equals("")) {
+        if (!purchaseItemName.equals("") && !purchaseCode.equals("") && !purchQuty.equals("") && !purRate.equals("") && !purDisc.equals("")) {
 
             item = new ListItem();
             item.setItemName(purchaseItemName);
@@ -648,20 +654,31 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             item.setItemDisc(purDisc);
             item.setItemStaus(purstatus);
             listForSearchConcepts1.add(0, item);
-            adapter1 = new MyCustomAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts1);
+            adapter1 = new InwardEntryAdapter(Activity_Inward_Entry_Screen.this, android.R.layout.simple_list_item_1, listForSearchConcepts1);
 
             for (int i = 0; i < listForSearchConcepts1.size(); i++) {
                 myList.setAdapter(adapter1);
                 myList.setScrollingCacheEnabled(true);
                 adapter1.notifyDataSetChanged();
             }
-        } else {
+            dialogs.dismiss();
+            edt_nameNew.setText("");
+            edt_itemCodeNew.setText("");
+            edt_qutyNew.setText("");
+            edt_rateNew.setText("");
+            edt_discountNew.setText("");
 
+        } else {
+            dialogs.show();
             Toast.makeText(Activity_Inward_Entry_Screen.this, R.string.dialogAdd_new, Toast.LENGTH_SHORT).show();
         }
+       // dialogs.dismiss();
     }
 
-    private void backPressed() {
+    @Override
+    public void onBackPressed() {
+       // super.onBackPressed();
+
         int count =listForSearchConcepts.size();
         int counts =listForSearchConcepts1.size();
         if( count==0 && counts==0 ){
@@ -683,6 +700,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                             listForSearchConcepts1.clear();
                             listForSearchConcepts.clear();
                             Intent in = new Intent(Activity_Inward_Entry_Screen.this,HomeScreenActivity.class);
+                            in.addCategory(Intent.CATEGORY_HOME);
+                            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(in);
                             finish();
                         }
@@ -697,77 +716,6 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
             alertDialog.show();
         }
     }
-
-//    @Override
-//    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//        /*Toast toast = Toast.makeText(getApplicationContext(),
-//                "Item " + (position + 1) + ": " + listForSearchConcepts.get(position).toString() + "ItemCode :" +
-//                        listForSearchConcepts.get(position).getItemCode().toString(),
-//                Toast.LENGTH_SHORT);
-//        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
-//        toast.show();*/
-//
-//        LayoutInflater li = getLayoutInflater();
-//        //Getting the View object as defined in the customtoast.xml file
-//        View layout = li.inflate(R.layout.customtoast,
-//                (ViewGroup) findViewById(R.id.custom_toast_layout));
-//
-//        //Creating the Toast object
-//        Toast toast = new Toast(getApplicationContext());
-//        toast.setDuration(Toast.LENGTH_SHORT);
-//        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-//        toast.setView(layout);//setting the view of custom toast layout
-//        toast.show();
-///*
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-//                Activity_Inward_Entry_Screen.this);
-//        alertDialogBuilder.setTitle("Item Details");
-//        alertDialogBuilder.setMessage(listForSearchConcepts.get(position).getItemCode().toString());
-//        alertDialogBuilder.setMessage(listForSearchConcepts.get(position).getItemName().toString());
-//        alertDialogBuilder.setMessage(listForSearchConcepts.get(position).getItemRate().toString());
-//
-//        alertDialogBuilder
-//                .setCancelable(false)
-//                .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog,int id) {
-//
-//
-//                    }
-//                })
-//                .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog,int id) {
-//
-//                        dialog.cancel();
-//                    }
-//                });
-//
-//        AlertDialog alertDialog = alertDialogBuilder.create();
-//        Window window = alertDialog.getWindow();
-//        WindowManager.LayoutParams wlp = window.getAttributes();
-//
-//        wlp.gravity = Gravity.BOTTOM;
-//        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//        window.setAttributes(wlp);
-//       *//* alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
-//
-//        wmlp.gravity = Gravity.TOP | Gravity.LEFT;
-//        wmlp.x = 100;   //x position
-//        wmlp.y = 100;   //y position*//*
-//
-//
-//        alertDialog.show();*/
-//    }
-
-  /*  @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-        Toast.makeText(getApplicationContext(),
-                "Item " + (position + 1) + ": " + listForSearchConcepts.get(position).toString() + "ItemCode :" +
-                        listForSearchConcepts.get(position).getItemCode().toString(),
-                Toast.LENGTH_SHORT).show();
-
-        return true;
-    }*/
 
 
     class GowdnDetails extends AsyncTask<Void, Void, Void>{
@@ -828,7 +776,7 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
                     // TODO Auto-generated method stub
                 }
             });
-            Toast.makeText(Activity_Inward_Entry_Screen.this," Updated ",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(Activity_Inward_Entry_Screen.this," Updated ",Toast.LENGTH_SHORT).show();
 
 
         }
@@ -933,7 +881,8 @@ public class Activity_Inward_Entry_Screen extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void args) {
             Toast.makeText(Activity_Inward_Entry_Screen.this," Updated ",Toast.LENGTH_SHORT).show();
-
+            listForSearchConcepts.clear();
+            listForSearchConcepts1.clear();
 
         }
     }

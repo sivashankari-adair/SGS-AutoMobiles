@@ -107,10 +107,10 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
                     break;
 
                 case R.id.relative3:
-                    Intent intentSave=new Intent(HomeScreenActivity.this,Activity_Inward_Entry_Offline.class);
+                    /*Intent intentSave=new Intent(HomeScreenActivity.this,Activity_Inward_Entry_Offline.class);
                     intentSave.putExtra("Inward"," ");
                     startActivity(intentSave);
-                    finish();
+                    finish();*/
 
                     break;
 

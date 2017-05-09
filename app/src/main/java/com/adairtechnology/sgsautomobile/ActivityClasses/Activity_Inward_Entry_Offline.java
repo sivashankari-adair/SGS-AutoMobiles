@@ -37,7 +37,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.adairtechnology.sgsautomobile.Adapters.MyCustomAdapter;
+import com.adairtechnology.sgsautomobile.Adapters.InwardEntryAdapter;
 import com.adairtechnology.sgsautomobile.Db.DBController;
 import com.adairtechnology.sgsautomobile.Fragments.Fragment_Items_One;
 import com.adairtechnology.sgsautomobile.Models.Godown;
@@ -93,7 +93,7 @@ public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
     String value,output1;
     ArrayList<HashMap<String, String>> output ;
     public static int RowCount;
-    public static MyCustomAdapter adapter,adapter1;
+    public static InwardEntryAdapter adapter,adapter1;
     public static TextView tex_rowCount, txt_total;
     FloatingActionButton floatingActionButton_add;
     ArrayList<String> finallist = new ArrayList<String>();
@@ -389,6 +389,7 @@ public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
                 break;
             case R.id.save_btn_dialogPur:
 
+
                 linear_purchase.setVisibility(View.GONE);
                 relative_list.setVisibility(View.VISIBLE);
 
@@ -459,7 +460,7 @@ public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
         text = edt_search.getText().toString().toLowerCase(Locale.getDefault());
         System.out.println("The string value " +text);
         if(!text.equals("")) {
-            adapter.filter(text);
+            ///adapter.filter(text);
         }
         else {
             System.out.println("Empty Search");
@@ -491,7 +492,7 @@ public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
                     listForSearchConcepts.add(0, item1);
 
                 }
-                adapter = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts);
+                adapter = new InwardEntryAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts);
                 myList.setAdapter(adapter);
 
                 adapter.notifyDataSetChanged();
@@ -518,7 +519,7 @@ public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
                     listForSearchConcepts1.add(0, item1);
 
                 }
-                adapter1 = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts1);
+                adapter1 = new InwardEntryAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts1);
                 myList.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -587,7 +588,7 @@ public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
             item.setItemRate(purRate);
             item.setItemDisc(purDisc);
             listForSearchConcepts.add(0, item);
-            adapter = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts);
+            adapter = new InwardEntryAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts);
 
             for (int i = 0; i < listForSearchConcepts.size(); i++) {
 
@@ -620,7 +621,7 @@ public class Activity_Inward_Entry_Offline extends AppCompatActivity implements
             item.setItemRate(purRate);
             item.setItemDisc(purDisc);
             listForSearchConcepts1.add(0, item);
-            adapter1 = new MyCustomAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts1);
+            adapter1 = new InwardEntryAdapter(context, android.R.layout.simple_list_item_1, listForSearchConcepts1);
 
             for (int i = 0; i < listForSearchConcepts1.size(); i++) {
                 myList.setAdapter(adapter1);

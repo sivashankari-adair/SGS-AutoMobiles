@@ -20,6 +20,7 @@
             android:layout_gravity="start"
             android:paddingTop="0dp"
             android:ems="3"
+            android:maxLength="15"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"
             android:hint="@string/hint_party_name">
@@ -38,7 +39,8 @@
             android:id="@+id/pur_bill_number"
             android:ems="3"
             android:paddingTop="0dp"
-            android:inputType="number"
+            android:inputType="text|number"
+            android:maxLength="10"
             android:layout_width="match_parent"
             android:layout_gravity="start"
             android:layout_height="wrap_content"
